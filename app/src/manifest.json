@@ -1,6 +1,6 @@
 {
-  "name": "Preact PWA",
-  "short_name": "Preact PWA",
+  "name": "Nyart",
+  "short_name": "Nyart",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

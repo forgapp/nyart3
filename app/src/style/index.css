@@ -1,0 +1,29 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #FAFAFA;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  overflow: auto;
+	background: #fafafa;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+#app {
+	height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  overflow: auto;
+  padding: 15px 20px;
+}
