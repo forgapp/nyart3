@@ -5,7 +5,7 @@ import { Information } from './display';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
 import { Link } from 'preact-router';
-import Markdown from 'preact-markdown';
+import Notes from '../notes';
 
 export default class CandidateDetails extends Component {
   state = { record: null }
@@ -130,7 +130,7 @@ export default class CandidateDetails extends Component {
           />
         </Pane>
         <Pane label="Notes">
-          <Markdown markdown={ record.InterviewNotes } />
+          <Notes  markdown={ record.InterviewNotes } />
         </Pane>
       </Tabs>
 

@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import { route } from 'preact-router';
 import { database } from '../../lib/firebase';
-import Markdown from 'preact-markdown';
+import Notes from '../../components/notes';
 
 class EditRecordNotes extends Component {
   state = {
@@ -56,27 +56,37 @@ class EditRecordNotes extends Component {
     return (<div className="container">
       <div class="columns">
         <div class="column">
-          <h3 class="title">Editor</h3>
-          <textarea value={ notes } onInput={ this.handleChange }></textarea>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <h3 class="title">Editor</h3>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <div className="field is-horizontal">
+                  <div className="field-label"></div>
+                  <div className="field-body">
+                    <div className="field is-grouped">
+                      <div className="control">
+                        <button type="button" className="button is-primary" onClick={ this.handleSubmit }>
+                          Save
+                        </button>
+                      </div>
+                      <div className="control">
+                        <button type="button" className="button" onClick={ this.handleCancel }>Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+          <textarea class="textarea" value={ notes } onInput={ this.handleChange }></textarea>
         </div>
         <div class="column">
           <h3 class="title">Preview</h3>
-          <Markdown markdown={ this.state.notes } />
-        </div>
-      </div>
-      <div className="field is-horizontal">
-        <div className="field-label"></div>
-        <div className="field-body">
-          <div className="field is-grouped">
-            <div className="control">
-              <button type="button" className="button is-primary" onClick={ this.handleSubmit }>
-                Save
-              </button>
-            </div>
-            <div className="control">
-              <button type="button" className="button" onClick={ this.handleCancel }>Cancel</button>
-            </div>
-          </div>
+          <Notes  markdown={ this.state.notes } />
         </div>
       </div>
     </div>);
