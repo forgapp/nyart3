@@ -9,6 +9,8 @@ import Profile from 'async!../routes/profile';
 import New from 'async!../routes/new';
 import Search from 'async!../routes/search';
 import Details from 'async!../routes/details';
+import EditRecordInformation from 'async!../routes/editInformation';
+import EditRecordNotes from 'async!../routes/editNotes';
 import Login from '../routes/login';
 import NotFound from '../routes/notFound';
 import Spinner from './spinner';
@@ -61,6 +63,8 @@ export default class App extends Component {
             <New path="/new" />
             <Search path="/search" />
             <Details path="/details/:type/:id" />
+            <EditRecordInformation path="/edit-info/:type/:id" />
+            <EditRecordNotes path="/edit/:fieldName/:type/:id" />
             <NotFound default />
 					</Router>
 				</div>

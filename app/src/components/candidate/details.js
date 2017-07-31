@@ -5,6 +5,7 @@ import { Information } from './display';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
 import { Link } from 'preact-router';
+import Markdown from 'preact-markdown';
 
 export default class CandidateDetails extends Component {
   state = { record: null }
@@ -39,8 +40,28 @@ export default class CandidateDetails extends Component {
     this.recordRef = null;
   }
 
+
+
+  /*
+  function formatText(el, tagstart, tagend){
+		if (el.setSelectionRange) {
+			el.value = el.value.substring(0,el.selectionStart) + tagstart + el.value.substring(el.selectionStart,el.selectionEnd) + tagend + el.value.substring(el.selectionEnd,el.value.length)
+		}else{
+			var selectedText = document.selection.createRange().text;
+
+			if (selectedText != "") {
+				var newText = tagstart + selectedText + tagend;
+				document.selection.createRange().text = newText;
+			}
+		}
+    }
+
+*/
+
+
+
+
   render({ id }, { record }) {
-    console.log('RENDER', record);
     if(!record) {
       return (<Spinner />);
     }
@@ -69,17 +90,20 @@ export default class CandidateDetails extends Component {
               </div>
               <div class="dropdown-menu">
                 <div class="dropdown-content">
-                  <Link class="dropdown-item" href={ `/edit/Candidate/info/${id}` }>
+                  <Link class="dropdown-item" href={ `/edit-info/Candidate/${id}` }>
                     Edit Information
                   </Link>
                   <a class="dropdown-item">
                     Add resume
                   </a>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item" href={ `/edit/InterviewNotes/Candidate/${id}` }>
                     Edit Interview Notes
                   </a>
                   <a class="dropdown-item">
                     Set Off-Limit
+                  </a>
+                  <a class="dropdown-item">
+                    Prefered Recruiter
                   </a>
                 </div>
               </div>
@@ -95,18 +119,18 @@ export default class CandidateDetails extends Component {
             Nationality={ record.Nationality }
             Birthdate={ record.Birthdate }
             Status={ record.Status }
-            Title={ record.Title }
+            Title={ record.JobTitle }
             Company={ record.Company }
             Salary={ record.Salary }
             RegistrationDate={ record.RegistrationDate }
-            RecruiterName={ record.RecruiterName }
+            RecruiterName={ record.Recruiter.Name }
             RecruiterId={ record.RecruiterId }
             Source={ record.Source }
             Phones={ record.Phones }
           />
         </Pane>
         <Pane label="Notes">
-         My notes
+          <Markdown markdown={ record.InterviewNotes } />
         </Pane>
       </Tabs>
 
