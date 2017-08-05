@@ -2,11 +2,8 @@ import { h, Component } from 'preact';
 import { Link } from 'preact-router/match';
 import style from './style';
 
-console.log('NotFound style1', style)
-
 export default class NotFound extends Component {
 	render({ matches }, state) {
-	  console.log('NotFound style2', style)
     	  return (<main class={ `is-flex-mobile is-flex-tablet-only is-flex-desktop-only is-flex-widescreen flex-is-align-items-center flex-is-justify-content-center ${style.isCentered}` }>
             <div class="columns">
                 <div class="column flex-is-justify-content-center flex-is-align-items-center">

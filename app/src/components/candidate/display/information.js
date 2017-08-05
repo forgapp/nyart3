@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import { Link } from 'preact-router';
 import { PhonesDisplay } from '../../phone';
+import { DisplayCodes } from '../../codes';
 
 const Information = ({
   Nationality,
@@ -13,11 +14,12 @@ const Information = ({
   RecruiterName,
   RecruiterId,
   Source,
-  Phones
+  Phones,
+  Industry,
+  JobFunction
 }) => {
-  console.log('INFORMATION DISPLAY', Phones)
 return (<div id="information" class="columns">
-  <div class="column">
+  <div class="column is-3">
     <table class="is-hidden-desktop">
       <tr>
         <td>Nationality</td>
@@ -63,11 +65,21 @@ return (<div id="information" class="columns">
     </table>
   </div>
   <div class="column">
-    Industries<br />
-    Job Functions<br />
-    Skills<br />
+    <div class="columns is-desktop">
+      <div class="column">
+        <h1 class="title is-5">Industries</h1>
+        <DisplayCodes codes={ Industry } />
+      </div>
+      <div class="column">
+        <h1 class="title is-5">Job Functions</h1>
+        <DisplayCodes codes={ JobFunction } />
+      </div>
+      <div class="column">
+        <h1 class="title is-5">Skills</h1>
+      </div>
+    </div>
   </div>
-  <div class="column">
+  <div class="column is-3">
     <PhonesDisplay phones={ Phones } />
     Emails<br />
     Addresses<br />

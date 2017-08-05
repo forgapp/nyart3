@@ -82,7 +82,7 @@ class EditRecordNotes extends Component {
               </div>
             </div>
           </nav>
-          <textarea class="textarea" value={ notes } onInput={ this.handleChange }></textarea>
+          <textarea class="textarea" value={ notes || '' } onInput={ this.handleChange }></textarea>
         </div>
         <div class="column">
           <h3 class="title">Preview</h3>

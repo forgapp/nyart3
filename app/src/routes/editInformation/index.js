@@ -21,6 +21,7 @@ class EditRecordInformation extends Component {
     this.handleRecruiterSelect = this.handleRecruiterSelect.bind(this);
     this.handleCompanySelect = this.handleCompanySelect.bind(this);
     this.handleClientContactSelect = this.handleClientContactSelect.bind(this);
+    this.handleCodeChange = this.handleCodeChange.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +101,20 @@ class EditRecordInformation extends Component {
     this.setState({ record });
   }
 
+  handleCodeChange(item) {
+    // const currentCodes = this.state.record[item.id];
+    // const newCodes = [ ...currentCodes, item.value ].filter(p => !!p);
+
+    const record = Object.assign(
+      {},
+      this.state.record,
+      { [item.id]: item.value }
+      // { [item.id]: newCodes }
+    );
+
+    this.setState({ record });
+  }
+
   handleSubmit(event) {
     event.preventDefault();
 
@@ -125,6 +140,7 @@ class EditRecordInformation extends Component {
           handleSubmit={ this.handleSubmit }
           handleRecruiterSelect={ this.handleRecruiterSelect}
           handleCompanySelect={ this.handleCompanySelect}
+          handleCodeChange={ this.handleCodeChange }
         />;
       // case 'Job':
       //   return <JobAddForm
@@ -160,7 +176,7 @@ class EditRecordInformation extends Component {
 
   render({ id, type }, { record }) {
     return (<div className="container">
-      <div className="box">
+      <div>
         { record && this.getEditInformationForm(type) }
       </div>
       <pre>

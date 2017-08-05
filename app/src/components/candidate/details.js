@@ -6,6 +6,7 @@ import { levelTitle } from './style.css';
 import Spinner from '../spinner';
 import { Link } from 'preact-router';
 import Notes from '../notes';
+import Resume from './resume';
 
 export default class CandidateDetails extends Component {
   state = { record: null }
@@ -127,10 +128,15 @@ export default class CandidateDetails extends Component {
             RecruiterId={ record.RecruiterId }
             Source={ record.Source }
             Phones={ record.Phones }
+            Industry={ record.Industry }
+            JobFunction={ record.JobFunction }
           />
         </Pane>
         <Pane label="Notes">
           <Notes  markdown={ record.InterviewNotes } />
+        </Pane>
+        <Pane label="Resume">
+          <Resume id={ id } />
         </Pane>
       </Tabs>
 

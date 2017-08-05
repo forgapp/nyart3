@@ -2,7 +2,7 @@ import { h, Component } from 'preact';
 import { Selectbox } from '../selectbox';
 
 const EditLanguages = ({ languages, handleChange }) => {
-  const languageElements = languages
+  const languageElements = languages ? languages
     .map((language, index) => {
       const delLanguage = (event) => {
         event.preventDefault();
@@ -35,7 +35,7 @@ const EditLanguages = ({ languages, handleChange }) => {
           </button>
         </p>
       </div>)
-    });
+    }) : [];
 
   const changeLevel = (index, value) => {
     const newLanguage = Object.assign({}, languages[index], {
@@ -89,7 +89,7 @@ const EditLanguages = ({ languages, handleChange }) => {
     const newLanguages =  [ ...languages, {
         Language: '',
         Level: ''
-      }]
+      }].filter(p => !!p)
 
     handleChange({ target: {
       id: 'Languages',
