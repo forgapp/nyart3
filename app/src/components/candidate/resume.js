@@ -15,10 +15,11 @@ const Resume = ({ id }) => {
 
 
 uploadTask.then(snapshot => {
-  database.ref('Candidate')
+  const resumeRef = database.ref('Resumes')
     .child(id)
-    .child('Resumes')
-    .push(snapshot.downloadURL);
+    .push();
+    resumeRef.child('Name').set(file.name)
+    resumeRef.child('URL').set(snapshot.downloadURL);
 })
     // forEach(file => console.log(file.name));
   }

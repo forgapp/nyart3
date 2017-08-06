@@ -6,7 +6,7 @@ import { levelTitle } from './style.css';
 import Spinner from '../spinner';
 import { Link } from 'preact-router';
 import Notes from '../notes';
-import Resume from './resume';
+import { ResumesDisplay } from '../resume';
 
 export default class CandidateDetails extends Component {
   state = { record: null }
@@ -76,6 +76,10 @@ export default class CandidateDetails extends Component {
               <h4 class="subtitle is-5">{ record.FirstnameKanji } { record.LastnameKanji }</h4>
             </div>
           </div>
+
+          <div class="level-item">
+            { record.Nationality }
+          </div>
         </div>
 
         <div class="level-right">
@@ -94,8 +98,8 @@ export default class CandidateDetails extends Component {
                   <Link class="dropdown-item" href={ `/edit-info/Candidate/${id}` }>
                     Edit Information
                   </Link>
-                  <a class="dropdown-item">
-                    Add resume
+                  <a class="dropdown-item" href={ `/edit-resumes/${id}` }>
+                    Edit resumes
                   </a>
                   <a class="dropdown-item" href={ `/edit/InterviewNotes/Candidate/${id}` }>
                     Edit Interview Notes
@@ -104,7 +108,7 @@ export default class CandidateDetails extends Component {
                     Set Off-Limit
                   </a>
                   <a class="dropdown-item">
-                    Prefered Recruiter
+                    Lock Prefered Recruiter
                   </a>
                 </div>
               </div>
@@ -112,6 +116,8 @@ export default class CandidateDetails extends Component {
           </div>
         </div>
       </nav>
+
+      <ResumesDisplay id={ id }/>
 
       <Tabs>
         <Pane label="Information">
@@ -131,12 +137,10 @@ export default class CandidateDetails extends Component {
             Industry={ record.Industry }
             JobFunction={ record.JobFunction }
           />
+          <Notes label="Interview Notes"  markdown={ record.InterviewNotes } />
         </Pane>
-        <Pane label="Notes">
-          <Notes  markdown={ record.InterviewNotes } />
-        </Pane>
-        <Pane label="Resume">
-          <Resume id={ id } />
+        <Pane label="ATS">
+          
         </Pane>
       </Tabs>
 
@@ -147,6 +151,8 @@ export default class CandidateDetails extends Component {
       </div>);
   }
 }
+
+{/* <Resume id={ id } /> */}
 
       /*<div class="tile is-ancestor">
         <div class="tile is-child">

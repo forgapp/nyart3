@@ -2,7 +2,7 @@ import { h, Component } from 'preact';
 import Markdown from 'preact-markdown';
 import { Renderer } from 'marked';
 
-const Notes = ({ markdown }) => {
+const Notes = ({ label, markdown }) => {
   const render = new Renderer();
 
   render.heading = (text, level) => `<h${level} class="title is-${level}">${text}</h${level}>`;
@@ -13,6 +13,9 @@ const Notes = ({ markdown }) => {
 
   const markedOpt = { renderer: render };
 
-  return <Markdown markdownOpts={ markedOpt }  markdown={ markdown || '' } />
+  return <div>
+    <h3 class="title is-5">{ label }</h3>
+    <Markdown markdownOpts={ markedOpt }  markdown={ markdown || '' } />
+  </div>
 }
 export default Notes;
