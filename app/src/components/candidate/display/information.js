@@ -1,7 +1,10 @@
 import { h, Component } from 'preact';
 import { Link } from 'preact-router';
 import { PhonesDisplay } from '../../phone';
+import { EmailsDisplay } from '../../emails';
+import { AddressesDisplay } from '../../addresses';
 import { DisplayCodes } from '../../codes';
+import { fullwidthTable } from './style.css'
 
 const Information = ({
   Nationality,
@@ -15,12 +18,14 @@ const Information = ({
   RecruiterId,
   Source,
   Phones,
+  Emails,
+  Addresses,
   Industry,
   JobFunction
 }) => {
 return (<div id="information" class="columns">
   <div class="column is-3">
-    <table class="is-hidden-desktop">
+    <table class={ `${fullwidthTable} is-hidden-desktop` }>
       <tr>
         <td>Nationality</td>
         <td>{ Nationality }</td>
@@ -34,7 +39,7 @@ return (<div id="information" class="columns">
         <td>{ Status }</td>
       </tr>
     </table>
-    <table>
+    <table class={ fullwidthTable }>
       <tr>
         <td>Title</td>
         <td>{ Title }</td>
@@ -48,8 +53,7 @@ return (<div id="information" class="columns">
         <td>{ Salary }</td>
       </tr>
     </table>
-    Languages<br />
-    <table>
+    <table  class={ fullwidthTable }>
       <tr>
         <td>RegistrationDate</td>
         <td>{ RegistrationDate }</td>
@@ -81,8 +85,8 @@ return (<div id="information" class="columns">
   </div>
   <div class="column is-3">
     <PhonesDisplay phones={ Phones } />
-    Emails<br />
-    Addresses<br />
+    <EmailsDisplay emails={ Emails } />
+    <AddressesDisplay addresses={ Addresses } />
   </div>
 </div>);
 }

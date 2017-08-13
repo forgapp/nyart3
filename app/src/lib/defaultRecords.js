@@ -23,6 +23,7 @@ const candidateInput = {
   Lastname: '',
   FirstnameKanji: '',
   LastnameKanji: '',
+  Status: 'Active',
   JobTitle: '',
   Company: {
     id: '',

@@ -1,0 +1,13 @@
+.addressElement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.addressElement .leftIcon {
+  margin-right: 0.5em;
+}
+
+.addressElement .rigthIcon {
+  margin-left: 0.5em;
+}

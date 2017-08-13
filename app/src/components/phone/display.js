@@ -1,13 +1,17 @@
 import { h, Component } from 'preact';
+import { phoneElement, leftIcon, rigthIcon } from './style.css';
 
 const PhonesDisplay = ({ phones }) => {
-  console.log('PHONES DISPLAY', phones);
   const phonesList = phones ? Object.keys(phones).map(key => {
     const phone = phones[key];
 
-    return (<li>
-      { phone.Type } - { phone.Number }
-    </li>)
+    return (<li class={ phoneElement }>
+      <span class={ `icon ${leftIcon}` }>
+        <i class="fa fa-phone" aria-hidden="true"></i>
+      </span>
+      <a href={ `tel:${phone.Number}` }>{ phone.Number }</a>
+      { phone.Type && <small class={ rigthIcon }>{ `(${phone.Type})` }</small> }
+    </li>);
   }) : [];
 
   return (<ul>

@@ -7,6 +7,8 @@ import Spinner from '../spinner';
 import { Link } from 'preact-router';
 import Notes from '../notes';
 import { ResumesDisplay } from '../resume';
+import { DisplayLanguages } from '../languages';
+import { calculateAge } from '../../lib/date';
 
 export default class CandidateDetails extends Component {
   state = { record: null }
@@ -41,27 +43,6 @@ export default class CandidateDetails extends Component {
     this.recordRef = null;
   }
 
-
-
-  /*
-  function formatText(el, tagstart, tagend){
-		if (el.setSelectionRange) {
-			el.value = el.value.substring(0,el.selectionStart) + tagstart + el.value.substring(el.selectionStart,el.selectionEnd) + tagend + el.value.substring(el.selectionEnd,el.value.length)
-		}else{
-			var selectedText = document.selection.createRange().text;
-
-			if (selectedText != "") {
-				var newText = tagstart + selectedText + tagend;
-				document.selection.createRange().text = newText;
-			}
-		}
-    }
-
-*/
-
-
-
-
   render({ id }, { record }) {
     if(!record) {
       return (<Spinner />);
@@ -72,13 +53,18 @@ export default class CandidateDetails extends Component {
         <div class="level-left">
           <div class="level-item">
             <div>
-              <h3 class={ `title is-3 ${levelTitle}` }>{ record.Firstname } { record.Lastname } <small>(30)</small></h3>
+              <h3 class={ `title is-3 ${levelTitle}` }>{ record.Firstname } { record.Lastname } <small>({calculateAge(record.DateOfBirth)})</small></h3>
               <h4 class="subtitle is-5">{ record.FirstnameKanji } { record.LastnameKanji }</h4>
             </div>
           </div>
 
           <div class="level-item">
-            { record.Nationality }
+            <span>{ record.Nationality }</span>
+            <span>
+              <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+              { record.DateOfBirth }
+            </span>
+             <span>{ record.Status }</span>
           </div>
         </div>
 
@@ -104,10 +90,10 @@ export default class CandidateDetails extends Component {
                   <a class="dropdown-item" href={ `/edit/InterviewNotes/Candidate/${id}` }>
                     Edit Interview Notes
                   </a>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item is-hidden">
                     Set Off-Limit
                   </a>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item is-hidden">
                     Lock Prefered Recruiter
                   </a>
                 </div>
@@ -117,6 +103,7 @@ export default class CandidateDetails extends Component {
         </div>
       </nav>
 
+      <DisplayLanguages languages={ record.Languages } />
       <ResumesDisplay id={ id }/>
 
       <Tabs>
@@ -124,7 +111,7 @@ export default class CandidateDetails extends Component {
 
           <Information
             Nationality={ record.Nationality }
-            Birthdate={ record.Birthdate }
+            Birthdate={ record.DateOfBirth }
             Status={ record.Status }
             Title={ record.JobTitle }
             Company={ record.Company }
@@ -134,13 +121,15 @@ export default class CandidateDetails extends Component {
             RecruiterId={ record.RecruiterId }
             Source={ record.Source }
             Phones={ record.Phones }
+            Emails={ record.Emails }
+            Addresses={ record.Addresses }
             Industry={ record.Industry }
             JobFunction={ record.JobFunction }
           />
           <Notes label="Interview Notes"  markdown={ record.InterviewNotes } />
         </Pane>
         <Pane label="ATS">
-          
+
         </Pane>
       </Tabs>
 

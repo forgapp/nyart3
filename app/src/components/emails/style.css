@@ -1,0 +1,13 @@
+.emailElement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.emailElement .leftIcon {
+  margin-right: 0.5em;
+}
+
+.emailElement .rigthIcon {
+  margin-left: 0.5em;
+}

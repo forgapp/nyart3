@@ -3,7 +3,7 @@ import { database } from '../../lib/firebase';
 
 class Display extends Component {
   state = { resumes: {} }
-  
+
   componentDidMount() {
     this.resumeRef = database.ref('Resumes')
       .child(this.props.id);
@@ -17,9 +17,9 @@ class Display extends Component {
     this.resumeRef.off('value');
     this.resumeRef = null;
   }
-  
+
   render(_, { resumes }) {
-    const resumesElements = Object.keys(resumes)
+    const resumesElements = resumes ? Object.keys(resumes)
       .map(key => {
         const file = resumes[key];
 
@@ -28,8 +28,8 @@ class Display extends Component {
             <i class="fa fa-file-text-o" aria-hidden="true"></i>
           </span>
           <span>{ file.Name }</span>
-        </a>)
-      });
+        </a>);
+      }) : {};
 
     return (<div>{ resumesElements }</div>);
   }

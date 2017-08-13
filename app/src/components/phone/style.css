@@ -1,0 +1,13 @@
+.phoneElement {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.phoneElement .leftIcon {
+  margin-right: 0.5em;
+}
+
+.phoneElement .rigthIcon {
+  margin-left: 0.5em;
+}

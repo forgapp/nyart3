@@ -4,6 +4,10 @@ import { Tabs, Pane } from '../tabs';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
 import { Link } from 'preact-router';
+import { fullwidthTable } from './style.css';
+import { PhonesDisplay } from '../phone';
+import { DisplayCodes } from '../codes';
+import Notes from '../notes';
 
 import CandidateCard from '../candidate/card';
 
@@ -26,8 +30,9 @@ class CompanyDetails extends Component {
       .equalTo(id);
 
     this.candidateRef.on("value", (snapshot) => {
-      console.log(snapshot.val())
-      this.setState({ candidates: snapshot.val() });
+      const candidates = snapshot.val() || {};
+
+      this.setState({ candidates });
     });
 
     this.recordRef.on('value', snapshot => {
@@ -79,8 +84,11 @@ class CompanyDetails extends Component {
               </div>
               <div class="dropdown-menu">
                 <div class="dropdown-content">
-                  <Link class="dropdown-item" href={ `/edit/Company/info/${id}` }>
+                  <Link class="dropdown-item" href={ `/edit-info/Company/${id}` }>
                     Edit Information
+                  </Link>
+                  <Link class="dropdown-item" href={ `/edit/Profile/Company/${id}` }>
+                    Edit Company Profile
                   </Link>
                   <a class="dropdown-item">
                     Add Candidate
@@ -102,14 +110,14 @@ class CompanyDetails extends Component {
         <Pane label="Information">
           <div id="information" class="columns">
             <div class="column">
-              <table>
+              <table  class={ fullwidthTable }>
                 <tr>
                   <td>RegistrationDate</td>
                   <td>{ record.RegistrationDate }</td>
                 </tr>
                 <tr>
                   <td>RecruiterName</td>
-                  <td>{ record.RecruiterName }</td>
+                  <td>{ record.Recruiter.Name }</td>
                 </tr>
                 <tr>
                   <td>Source</td>
@@ -118,14 +126,16 @@ class CompanyDetails extends Component {
               </table>
             </div>
             <div class="column">
-              Industries
+              <h1 class="title is-5">Industries</h1>
+              <DisplayCodes codes={ record.Industry } />
             </div>
-            <div class="column">
-              Phones
-              Emails
-              Addresses
+            <div class="column is-3">
+              <PhonesDisplay phones={ record.Phones } />
+              Emails<br />
+              Addresses<br />
             </div>
           </div>
+          <Notes label="Profile"  markdown={ record.Profile } />
         </Pane>
         <Pane label="Profile">
          My notes
@@ -138,7 +148,7 @@ class CompanyDetails extends Component {
         <Pane label="Candidates">
           <div class="columns is-multiline">
             { candidates && Object.keys(candidates).map(key => (<div class="column is-3">
-              <CandidateCard id={ key } candidate={ candidates[key] } />
+              <CandidateCard id={ key } record={ candidates[key] } />
             </div>)) }
           </div>
         </Pane>
@@ -153,7 +163,70 @@ class CompanyDetails extends Component {
 
 export default CompanyDetails;
 
+/*
+
+<Information
+            Name={ record.Name }
+            Type={ record.Type }
+            isSaving={ isSaving }
+            updateEntityField={ updateEntityField }
+            onSave={ onSave }
+            onCancel={ onCancel }
+          />
+        </div>
+        <div className={ classNames('col-xs-6 col-md-12', style.card) }>
+          <RegistrationInformation
+            RegistrationDate={ record.RegistrationDate }
+            RecruiterName={ record.RecruiterName }
+            RecruiterId={ record.RecruiterId }
+            Source={ record.Source }
+            SourceList={ Picklists.CompanySource }
+            updateEntityField={ updateEntityField }
+            Users={ Users }
+            onCancel={ onCancel }
+            onSave={ onSave }
+          />
+        </div>
+      </div>
+    </div>
+    <div className="col-xs-12 col-md-9 mdl-card mdl-shadow--4dp">
+      <Tabs selected={ 0 }>
+        <Pane label="Information">
+          <div className="row">
+            <div className="col-xs-6 col-md-6">
+              <Codes
+                Label="Industries"
+                Codes={ record.Industries }
+                CodeList={ CodeList.Industry }
+                onChange={ handleIndustryChange }
+                onCancel={ onCancel }
+                onSave={ onSave }
+              />
+            </div>
+            <div className="col-xs-6 col-md-6">
+              <Phones phones={ record.Phones } onSave={ savePhones } />
+              <Emails emails={ record.Emails } onSave={ saveEmails } />
+              <Addresses addresses={ record.Addresses } onSave={ saveAddresses } />
+            </div>
+          </div>
+        </Pane>
+        <Pane label="Profile">
+          <TextEditor placeholder="Company Profile" onSave={ saveProfile } value={ record.Profile } />
+        </Pane>
+        <Pane label={ `Candidates (${related.getIn(['Candidate', 'hits', 'total']) || 0})` }>
+          <RelatedEntity label="Candidates" entities={ related.get('Candidate') } />
+        </Pane>
+        <Pane label={ `Contacts (${related.getIn(['ClientContact', 'hits', 'total']) || 0})` }>
+          <RelatedEntity label="Client Contacts" entities={ related.get('ClientContact') } />
+        </Pane>
+        <Pane label={ `Jobs (${related.getIn(['Job', 'hits', 'total']) || 0})` }>
+          <RelatedEntity label="Jobs" entities={ related.get('Job') } />
+        </Pane>
+      </Tabs>
+    </div>
+  </div>);
 
 
 
 
+*/

@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import { route } from 'preact-router';
 import { database, storage } from '../../lib/firebase';
 
 class Edit extends Component {
@@ -14,6 +15,7 @@ class Edit extends Component {
     this.onUploadCompleted = this.onUploadCompleted.bind(this);
     this.deleteResume = this.deleteResume.bind(this);
     this.renderResume = this.renderResume.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -65,7 +67,7 @@ class Edit extends Component {
 
     }
 
-    
+
 
     // this.setState({ uploadTasks: files });
   }
@@ -101,6 +103,12 @@ class Edit extends Component {
     </li>
   }
 
+  handleClick(event) {
+    event.preventDefault();
+
+    route(`/details/candidate/${this.props.id}`);
+  }
+
   render(_, { resumes, uploadTasks }) {
     const resumeElements = resumes ? Object.keys(resumes)
       .map(this.renderResume) : [];
@@ -118,11 +126,12 @@ class Edit extends Component {
           { resumeElements }
           </ul>
         </aside>
+        <button class="button" onClick={ this.handleClick }>Back to Candidate</button>
       </div>
 
       <div class="column">
         <div class="field">
-          <div class="file is-large is-centered">
+          <div class="file is-info is-large is-centered">
             <label class="file-label">
               <input class="file-input" multiple type="file" name="resume" onChange={ this.handleChange }  />
               <span class="file-cta">

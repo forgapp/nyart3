@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import { Link } from 'preact-router';
 
-const CompanyCard = () => (<div class="card">
+const CompanyCard = ({ id, record }) => (<div class="card">
   <header class="card-header">
     <div class="card-header-icon">
       <span class="icon">
@@ -9,22 +9,16 @@ const CompanyCard = () => (<div class="card">
       </span>
     </div>
     <p class="card-header-title">
-       <Link href="/details/company/-Kpwm--uL3zwNzxh-BoX">Company Name</Link>
+      <Link href={`/details/company/${id}`}>{ record.Name }</Link>
     </p>
   </header>
-    <div class="card-content">
-     <div class="content">
-       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-       <a>@bulmaio</a>. <a>#css</a> <a>#responsive</a>
-       <br />
-       <small>11:09 PM - 1 Jan 2016</small>
-     </div>
-   </div>
-   <footer class="card-footer">
-     <a class="card-footer-item">Save</a>
-     <a class="card-footer-item">Edit</a>
-     <a class="card-footer-item">Delete</a>
-   </footer>
+  <div class="card-content">
+    <div class="content">
+      <div>
+        { record.Recruiter.Name && `by ${record.Recruiter.Name}` } <small>{ record.RegistrationDate && `@${record.RegistrationDate}` }</small>
+      </div>
+    </div>
+  </div>
 </div>);
 
 export default CompanyCard;

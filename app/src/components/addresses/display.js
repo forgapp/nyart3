@@ -1,18 +1,27 @@
 import { h, Component } from 'preact';
+import { addressElement, leftIcon, rigthIcon } from './style.css';
 
-const PhonesDisplay = ({ phones }) => {
-  console.log('PHONES DISPLAY', phones);
-  const phonesList = phones ? Object.keys(phones).map(key => {
-    const phone = phones[key];
+const AddressesDisplay = ({ addresses }) => {
+  const addressesList = addresses ? Object.keys(addresses).map(key => {
+    const address = addresses[key];
 
-    return (<li>
-      { phone.Type } - { phone.Number }
-    </li>)
+    return (<li class={ addressElement }>
+      <span class={ `icon ${leftIcon}` }>
+        <i class="fa fa-address-book-o" aria-hidden="true"></i>
+      </span>
+      <p>
+        { address.Street }<br />
+        { address.Complement }<br />
+        { address.City } { address.State }<br />
+        { address.Country }
+      </p>
+      { address.Type && <small class={ rigthIcon }>{ `(${address.Type})` }</small> }
+    </li>);
   }) : [];
 
   return (<ul>
-    { phonesList }
+    { addressesList }
   </ul>);
 };
 
-export default PhonesDisplay;
+export default AddressesDisplay;

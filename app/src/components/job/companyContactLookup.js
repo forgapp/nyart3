@@ -23,15 +23,16 @@ class CompanyContactLookup extends Component {
       .equalTo(companyId);
 
     contactRef.once("value").then(snapshot => {
-      console.log(snapshot.val())
-      this.setState({ contacts: snapshot.val() });
+      const contacts = snapshot.val() || {};
 
-      const contactKeys = Object.keys(snapshot.val());
+      this.setState({ contacts });
+
+      const contactKeys = Object.keys(contacts);
       if(contactKeys.length > 0) {
         this.props.handleContactSelect({
           id: contactKeys[0],
-          value: `${snapshot.val()[contactKeys[0]].Firstname} ${snapshot.val()[contactKeys[0]].Lastname}`
-        })
+          value: `${contacts[contactKeys[0]].Firstname} ${contacts[contactKeys[0]].Lastname}`
+        });
       }
     });
   }

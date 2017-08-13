@@ -1,18 +1,22 @@
 import { h, Component } from 'preact';
+import { emailElement, leftIcon, rigthIcon } from './style.css';
 
-const PhonesDisplay = ({ phones }) => {
-  console.log('PHONES DISPLAY', phones);
-  const phonesList = phones ? Object.keys(phones).map(key => {
-    const phone = phones[key];
+const EmailsDisplay = ({ emails }) => {
+  const emailsList = emails ? Object.keys(emails).map(key => {
+    const email = emails[key];
 
-    return (<li>
-      { phone.Type } - { phone.Number }
-    </li>)
+    return (<li class={ emailElement }>
+      <span class={ `icon ${leftIcon}` }>
+        <i class="fa fa-at" aria-hidden="true"></i>
+      </span>
+      <a href={ `mailto:${email.Address}` }>{ email.Address }</a>
+      { email.Type && <small class={ rigthIcon }>{ `(${email.Type})` }</small> }
+    </li>);
   }) : [];
 
   return (<ul>
-    { phonesList }
+    { emailsList }
   </ul>);
 };
 
-export default PhonesDisplay;
+export default EmailsDisplay;
