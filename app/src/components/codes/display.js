@@ -18,10 +18,10 @@ const DisplayCodes = ({ codes }) => {
 
   return (<div class="menu">
     { Object.keys(codeElements).map(cat => ([
-      <p class="menu-label">{ cat }</p>,
-      <ul class="menu-list">
-        { codeElements[cat].map(code => (<li>{ code }</li>)) }
-      </ul>
+      <h6 class="title is-6 is-marginless">{ cat }</h6>,
+      <div class="tags">
+        { codeElements[cat].map(code => (<div class="tag">{ code }</div>)) }
+      </div>
     ])) }
   </div>);
 };

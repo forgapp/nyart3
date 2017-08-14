@@ -17,14 +17,12 @@ class EditCodes extends Component {
       this.removeCode(item.index);
     };
 
-    return (<li>
-      <a>
-        { item.code }
-        <button class="button is-danger is-outlined is-small is-pulled-right" onClick={ remove }>
-          <i class="fa fa-trash"></i>
-        </button>
-      </a>
-    </li>);
+    return (<div class="control">
+      <div class="tags has-addons">
+        <span class="tag is-info">{ item.code }</span>
+        <a class="tag is-delete" onClick={ remove }></a>
+      </div>
+    </div>);
   }
 
   addCode(code) {
@@ -75,7 +73,17 @@ class EditCodes extends Component {
       return newCodes;
     }, {}) : {};
 
-    return (<div class="menu">
+    return (<div>
+      { Object.keys(codeElements).map(cat => ([
+        <h5 class="title is-5">{ cat }</h5>,
+        <div class="field is-grouped is-grouped-multiline">
+          { codeElements[cat].map(this.generateCodeRow) }
+        </div>
+      ])) }
+      <AddCode type={ type } update={ this.addCode } />
+    </div>);
+
+    /*return (<div class="menu">
       { Object.keys(codeElements).map(cat => ([
         <p class="menu-label">{ cat }</p>,
         <ul class="menu-list">
@@ -83,7 +91,7 @@ class EditCodes extends Component {
         </ul>
       ])) }
       <AddCode type={ type } update={ this.addCode } />
-    </div>);
+    </div>);*/
   }
 }
 

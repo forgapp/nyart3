@@ -1,17 +1,18 @@
 import { auth } from './firebase';
+import { formatdateForInput } from './date';
 
-function getToday() {
+/*function getToday() {
   const today = new Date();
   const month = ("0" + (today.getMonth() + 1)).slice(-2)
   const day = ("0" + (today.getMonth() + 1)).slice(-2)
 
   return `${today.getFullYear()}-${month}-${day}`;
-}
+}*/
 
 const companyInput = {
   Name: '',
   Type: 'Target',
-  RegistrationDate: getToday(),
+  RegistrationDate: formatdateForInput(new Date()),
   Recruiter: {
     id: auth.currentUser.uid,
     Name: auth.currentUser.displayName
@@ -30,7 +31,7 @@ const candidateInput = {
     Name: ''
   },
   Level: 'Staff',
-  RegistrationDate: getToday(),
+  RegistrationDate: formatdateForInput(new Date()),
   Source: '',
   Recruiter: {
     id: auth.currentUser.uid,
@@ -49,7 +50,7 @@ const clientContactInput = {
     Name: ''
   },
   Level: 'Staff',
-  RegistrationDate: getToday(),
+  RegistrationDate: formatdateForInput(new Date()),
   Source: '',
   Recruiter: {
     id: auth.currentUser.uid,
@@ -70,7 +71,7 @@ const jobInput = {
   },
   SalaryMinimun: 0,
   SalaryMaximun: 0,
-  RegistrationDate: getToday(),
+  RegistrationDate: formatdateForInput(new Date()),
   Source: '',
   Recruiter: {
     id: auth.currentUser.uid,
@@ -84,7 +85,7 @@ export default function getRecordDefaultValue(type) {
       return companyInput;
     case 'Candidate':
       return candidateInput;
-    case 'Client Contact':
+    case 'ClientContact':
       return clientContactInput;
     case 'Job':
       return jobInput;

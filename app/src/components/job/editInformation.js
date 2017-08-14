@@ -1,11 +1,16 @@
 import { h, Component } from 'preact';
 import { Selectbox } from '../selectbox';
 import Lookup from '../lookup';
+import { EditLanguages } from '../languages';
+import { EditCodes } from '../codes';
 import CompanyContactLookup from './companyContactLookup';
 
-const JobAddForm = ({ record, handleChange, handleSubmit, handleCancel, handleRecruiterSelect, handleCompanySelect, handleClientContactSelect }) => {
-  return (<form onSubmit={ handleSubmit }>
-    <div className="field is-horizontal">
+const JobInformationEdit = ({ record, handleChange, handleSubmit, handleCancel, handleRecruiterSelect, handleCompanySelect, handleCodeChange, handleClientContactSelect }) => (<form onSubmit={ handleSubmit }>
+  <div class="columns">
+  <div class="column is-8">
+<div class="box">
+  <h1 class="title">Job Information</h1>
+  <div className="field is-horizontal">
       <div className="field-label is-normal">
         <label className="label">Position</label>
       </div>
@@ -54,6 +59,19 @@ const JobAddForm = ({ record, handleChange, handleSubmit, handleCancel, handleRe
     </div>
 
     <div className="field is-horizontal">
+    <div className="field-label is-normal">
+      <label className="label">Work Location</label>
+    </div>
+    <div className="field-body">
+      <div className="field is-grouped">
+        <p className="control is-expanded">
+          <input id="WorkLocation" className="input" type="text" placeholder="WorkLocation" value={ record.WorkLocation } onChange={ handleChange } />
+        </p>
+      </div>
+    </div>
+  </div>
+
+    <div className="field is-horizontal">
       <div className="field-label is-normal">
         <label className="label">Registration</label>
       </div>
@@ -74,23 +92,54 @@ const JobAddForm = ({ record, handleChange, handleSubmit, handleCancel, handleRe
         <Selectbox id="Source" type='JobSource' value={ record.Source } handleChange={ handleChange } />
       </div>
     </div>
+</div>
+    </div>
 
-    <div className="field is-horizontal">
-      <div className="field-label"></div>
-      <div className="field-body">
-        <div className="field is-grouped">
-          <div className="control">
-            <button type="submit" className="button is-primary">
-              Save
-            </button>
-          </div>
-          <div className="control">
-            <button className="button" onClick={ handleCancel }>Cancel</button>
-          </div>
+
+    <div class="column is-4">
+<div class="box">
+     <h1 class="title">Languages</h1>
+      <EditLanguages languages={ record.Languages } handleChange={ handleChange } />
+    </div>
+</div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-4">
+<div class="box">
+     <h1 class="title">Industries</h1>
+     <EditCodes id="Industry" type="Industry" codes={ record.Industry } update={ handleCodeChange } />
+</div>
+    </div>
+    <div class="column is-4">
+<div class="box">
+     <h1 class="title">Job Functions</h1>
+     <EditCodes id="JobFunction" type="JobFunction" codes={ record.JobFunction } update={ handleCodeChange } />
+</div>
+    </div>
+    <div class="column is-4">
+<div class="box">
+     <h1 class="title">Skills</h1>
+</div>
+    </div>
+  </div>
+
+
+  <div className="field is-horizontal">
+    <div className="field-label"></div>
+    <div className="field-body">
+      <div className="field is-grouped">
+        <div className="control">
+          <button type="submit" className="button is-primary">
+            Save
+          </button>
+        </div>
+        <div className="control">
+          <button className="button" onClick={ handleCancel }>Cancel</button>
         </div>
       </div>
     </div>
-  </form>);
-};
+  </div>
+</form>);
 
-export default JobAddForm;
+export default JobInformationEdit;

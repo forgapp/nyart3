@@ -1,6 +1,8 @@
 import { h, Component } from 'preact';
+import { Link } from 'preact-router';
+import { DisplayLanguages } from '../languages';
 
-const JobCard = () => (<div class="card">
+const JobCard = ({ id, record }) => (<div class="card">
   <header class="card-header">
     <div class="card-header-icon">
       <span class="icon">
@@ -8,9 +10,18 @@ const JobCard = () => (<div class="card">
       </span>
     </div>
     <p class="card-header-title">
-       <a>Job Title</a>
+       <Link href={ `/details/job/${id}` }>{ record.JobTitle }</Link>
     </p>
   </header>
+
+  <div class="content">
+  </div>
+
+  <footer class="card-footer">
+      <div class="card-footer-item">
+        <DisplayLanguages languages={ record.Languages } />
+      </div>
+    </footer>
 </div>);
 
 export default JobCard;

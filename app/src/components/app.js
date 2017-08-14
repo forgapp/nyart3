@@ -12,6 +12,7 @@ import Details from 'async!../routes/details';
 import EditRecordInformation from 'async!../routes/editInformation';
 import EditRecordNotes from 'async!../routes/editNotes';
 import EditResumes from 'async!../routes/editResumes';
+import NewProcess from 'async!../routes/newProcess';
 import Login from '../routes/login';
 import NotFound from '../routes/notFound';
 import Spinner from './spinner';
@@ -66,7 +67,8 @@ export default class App extends Component {
             <Details path="/details/:type/:id" />
             <EditRecordInformation path="/edit-info/:type/:id" />
             <EditRecordNotes path="/edit/:fieldName/:type/:id" />
-			<EditResumes path="/edit-resumes/:id" />
+            <EditResumes path="/edit-resumes/:id" />
+            <NewProcess path="/process/new" />
             <NotFound default />
 					</Router>
 				</div>

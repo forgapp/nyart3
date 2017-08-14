@@ -143,7 +143,7 @@ class AddRecord extends Component {
           handleSubmit={ this.handleSubmit }
           handleRecruiterSelect={ this.handleRecruiterSelect}
         />;
-      case 'Client Contact':
+      case 'ClientContact':
         return <ClientContactddForm
           record={ this.state.record }
           handleChange={ this.handleChange }
@@ -171,7 +171,7 @@ class AddRecord extends Component {
                   <select onChange={ this.handleTypeSelection } value={ this.state.selectedType }>
                     <option></option>
                     <option>Candidate</option>
-                    <option>Client Contact</option>
+                    <option value="ClientContact">Client Contact</option>
                     <option>Company</option>
                     <option>Job</option>
                   </select>

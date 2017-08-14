@@ -2,6 +2,9 @@ import { h, Component } from 'preact';
 import { route } from 'preact-router';
 import { database } from '../../lib/firebase';
 import CandidateInformationEdit from '../../components/candidate/editInformation';
+import CompanyInformationEdit from '../../components/company/editInformation';
+import ClientContactInformationEdit from '../../components/clientContact/editInformation';
+import JobInformationEdit from '../../components/job/editInformation';
 /*
 import JobAddForm from '../../components/job/addForm';
 import CompanyAddForm from '../../components/company/addForm';
@@ -142,33 +145,35 @@ class EditRecordInformation extends Component {
           handleCompanySelect={ this.handleCompanySelect}
           handleCodeChange={ this.handleCodeChange }
         />;
-      // case 'Job':
-      //   return <JobAddForm
-      //     record={ this.state.record }
-      //     handleChange={ this.handleChange }
-      //     handleCancel={ this.handleCancel }
-      //     handleSubmit={ this.handleSubmit }
-      //     handleRecruiterSelect={ this.handleRecruiterSelect}
-      //     handleCompanySelect={ this.handleCompanySelect}
-      //     handleClientContactSelect={ this.handleClientContactSelect }
-      //   />;
-      // case 'Company':
-      //   return <CompanyAddForm
-      //     record={ this.state.record }
-      //     handleChange={ this.handleChange }
-      //     handleCancel={ this.handleCancel }
-      //     handleSubmit={ this.handleSubmit }
-      //     handleRecruiterSelect={ this.handleRecruiterSelect}
-      //   />;
-      // case 'Client Contact':
-      //   return <ClientContactddForm
-      //     record={ this.state.record }
-      //     handleChange={ this.handleChange }
-      //     handleCancel={ this.handleCancel }
-      //     handleSubmit={ this.handleSubmit }
-      //     handleRecruiterSelect={ this.handleRecruiterSelect}
-      //     handleCompanySelect={ this.handleCompanySelect}
-      //   />;
+      case 'Job':
+        return <JobInformationEdit
+          record={ this.state.record }
+          handleChange={ this.handleChange }
+          handleCancel={ this.handleCancel }
+          handleSubmit={ this.handleSubmit }
+          handleRecruiterSelect={ this.handleRecruiterSelect}
+          handleCompanySelect={ this.handleCompanySelect}
+          handleClientContactSelect={ this.handleClientContactSelect }
+          handleCodeChange={ this.handleCodeChange }
+        />;
+      case 'Company':
+        return <CompanyInformationEdit
+          record={ this.state.record }
+          handleChange={ this.handleChange }
+          handleCancel={ this.handleCancel }
+          handleSubmit={ this.handleSubmit }
+          handleRecruiterSelect={ this.handleRecruiterSelect}
+          handleCodeChange={ this.handleCodeChange }
+        />;
+      case 'ClientContact':
+        return <ClientContactInformationEdit
+          record={ this.state.record }
+          handleChange={ this.handleChange }
+          handleCancel={ this.handleCancel }
+          handleSubmit={ this.handleSubmit }
+          handleRecruiterSelect={ this.handleRecruiterSelect}
+          handleCompanySelect={ this.handleCompanySelect}
+        />;
       default:
         return (<p>Error</p>);
     }

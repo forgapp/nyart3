@@ -84,12 +84,12 @@ export default class CandidateDetails extends Component {
                   <Link class="dropdown-item" href={ `/edit-info/Candidate/${id}` }>
                     Edit Information
                   </Link>
-                  <a class="dropdown-item" href={ `/edit-resumes/${id}` }>
+                  <Link class="dropdown-item" href={ `/edit-resumes/${id}` }>
                     Edit resumes
-                  </a>
-                  <a class="dropdown-item" href={ `/edit/InterviewNotes/Candidate/${id}` }>
+                  </Link>
+                  <Link class="dropdown-item" href={ `/edit/InterviewNotes/Candidate/${id}` }>
                     Edit Interview Notes
-                  </a>
+                  </Link>
                   <a class="dropdown-item is-hidden">
                     Set Off-Limit
                   </a>

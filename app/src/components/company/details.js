@@ -6,15 +6,21 @@ import Spinner from '../spinner';
 import { Link } from 'preact-router';
 import { fullwidthTable } from './style.css';
 import { PhonesDisplay } from '../phone';
+import { EmailsDisplay } from '../emails';
+import { AddressesDisplay } from '../addresses';
 import { DisplayCodes } from '../codes';
 import Notes from '../notes';
 
 import CandidateCard from '../candidate/card';
+import ContactCard from '../clientContact/card';
+import JobCard from '../job/card';
 
 class CompanyDetails extends Component {
   state = {
     record: null,
-    candidates: null
+    candidates: null,
+    contacts: null,
+    jobs: null
   }
 
   constructor(props) {
@@ -29,10 +35,30 @@ class CompanyDetails extends Component {
       .orderByChild("Company/id")
       .equalTo(id);
 
+    this.contactsRef = database.ref("ClientContact")
+      .orderByChild("Company/id")
+      .equalTo(id);
+
+    this.jobsRef = database.ref("Job")
+      .orderByChild("Company/id")
+      .equalTo(id);
+
     this.candidateRef.on("value", (snapshot) => {
       const candidates = snapshot.val() || {};
 
       this.setState({ candidates });
+    });
+
+    this.contactsRef.on("value", (snapshot) => {
+      const contacts = snapshot.val() || {};
+
+      this.setState({ contacts });
+    });
+
+    this.jobsRef.on("value", (snapshot) => {
+      const jobs = snapshot.val() || {};
+
+      this.setState({ jobs });
     });
 
     this.recordRef.on('value', snapshot => {
@@ -55,7 +81,7 @@ class CompanyDetails extends Component {
     this.recordRef = null;
   }
 
-  render({ id }, { record, candidates }) {
+  render({ id }, { record, candidates, contacts, jobs }) {
     if(!record) {
       return (<Spinner />);
     }
@@ -90,13 +116,13 @@ class CompanyDetails extends Component {
                   <Link class="dropdown-item" href={ `/edit/Profile/Company/${id}` }>
                     Edit Company Profile
                   </Link>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item is-hidden">
                     Add Candidate
                   </a>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item is-hidden">
                     Add Client Contact
                   </a>
-                  <a class="dropdown-item">
+                  <a class="dropdown-item is-hidden">
                     Add Job
                   </a>
                 </div>
@@ -131,18 +157,17 @@ class CompanyDetails extends Component {
             </div>
             <div class="column is-3">
               <PhonesDisplay phones={ record.Phones } />
-              Emails<br />
-              Addresses<br />
+              <EmailsDisplay emails={ record.Emails } />
+              <AddressesDisplay addresses={ record.Addresses } />
             </div>
           </div>
           <Notes label="Profile"  markdown={ record.Profile } />
         </Pane>
-        <Pane label="Profile">
-         My notes
-        </Pane>
 
         <Pane label="Client Contacts">
-         Client Contacts
+         { contacts && Object.keys(contacts).map(key => (<div class="column is-3">
+              <ContactCard id={ key } record={ contacts[key] } />
+            </div>)) }
         </Pane>
 
         <Pane label="Candidates">
@@ -154,7 +179,9 @@ class CompanyDetails extends Component {
         </Pane>
 
         <Pane label="Jobs">
-         Jobs
+         { jobs && Object.keys(jobs).map(key => (<div class="column is-3">
+              <JobCard id={ key } record={ jobs[key] } />
+            </div>)) }
         </Pane>
       </Tabs>
       </div>);
