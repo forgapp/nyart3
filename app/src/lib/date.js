@@ -16,3 +16,16 @@ export function formatdateForInput(date) {
 
   return `${date.getFullYear()}-${month}-${day}`;
 }
+
+export function difference(date1, date2) {
+  const diff = date2.getTime() - date1.getTime();
+  const seconds = diff / 1000;
+  const minutes = Math.round(seconds / 60);
+  const hours = Math.round(minutes / 60);
+
+  return Math.round(hours / 24);
+}
+
+export function differenceFromToday(date) {
+  return difference(date, new Date());
+}

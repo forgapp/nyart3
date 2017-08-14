@@ -1,0 +1,37 @@
+.timeline {
+  display: flex;
+}
+
+.step {
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 0.5rem;
+  color: lightgrey;
+  border: 1px solid lightgrey;
+}
+
+.step:not(:last-child) {
+  border-right: 0;
+}
+
+.step.success {
+  background: #00d1b2;
+  color: white;
+
+}
+
+.stage {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  line-height: 1.125;
+}
+
+.date {
+  margin-top: -1.5rem;
+  font-size: 0.75rem;
+  float: right;
+  font-weight: 400;
+  line-height: 1.25;
+}

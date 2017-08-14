@@ -11,10 +11,12 @@ import { PhonesDisplay } from '../phone';
 import { EmailsDisplay } from '../emails';
 import { AddressesDisplay } from '../addresses';
 import { DisplayCodes } from '../codes';
+import Ats from '../ats';
 
 export default class JobDetails extends Component {
   state = {
-    record: null
+    record: null,
+    ats: null
   }
 
   constructor(props) {
@@ -29,6 +31,14 @@ export default class JobDetails extends Component {
 
     this.recordRef.on('value', snapshot => {
       this.setState({ record: snapshot.val() });
+    });
+
+    this.processesRef = database.ref("Process")
+      .orderByChild("Job/id")
+      .equalTo(id);
+
+    this.processesRef.on('value', snapshot => {
+      this.setState({ ats: snapshot.val() });
     });
   }
 
@@ -47,7 +57,7 @@ export default class JobDetails extends Component {
     this.recordRef = null;
   }
 
-  render({ id }, { record }) {
+  render({ id }, { record, ats }) {
     if(!record) {
       return (<Spinner />);
     }
@@ -169,7 +179,11 @@ export default class JobDetails extends Component {
           <Notes label="Notes"  markdown={ record.Notes } />
         </Pane>
         <Pane label="ATS">
-
+          { ats && Object.keys(ats).map(key => {
+              const process = ats[key];
+              return (<Ats id={ key } process={ process } type="Candidate" />)
+            })
+          }
         </Pane>
       </Tabs>
 
