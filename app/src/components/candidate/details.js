@@ -9,9 +9,13 @@ import Notes from '../notes';
 import { ResumesDisplay } from '../resume';
 import { DisplayLanguages } from '../languages';
 import { calculateAge } from '../../lib/date';
+import Ats from '../ats';
 
 export default class CandidateDetails extends Component {
-  state = { record: null }
+  state = { 
+    record: null,
+    ats: null
+  }
 
   constructor(props) {
     super(props);
@@ -25,6 +29,14 @@ export default class CandidateDetails extends Component {
 
     this.recordRef.on('value', snapshot => {
       this.setState({ record: snapshot.val() });
+    });
+
+    this.processesRef = database.ref("Process")
+      .orderByChild("Candidate/id")
+      .equalTo(id);
+
+    this.processesRef.on('value', snapshot => {
+      this.setState({ ats: snapshot.val() });
     });
   }
 
@@ -43,7 +55,7 @@ export default class CandidateDetails extends Component {
     this.recordRef = null;
   }
 
-  render({ id }, { record }) {
+  render({ id }, { record, ats }) {
     if(!record) {
       return (<Spinner />);
     }
@@ -81,6 +93,9 @@ export default class CandidateDetails extends Component {
               </div>
               <div class="dropdown-menu">
                 <div class="dropdown-content">
+                  <Link class="dropdown-item" href={ `/process/new?candidate=${id}` }>
+                    Apply to a job
+                  </Link>
                   <Link class="dropdown-item" href={ `/edit-info/Candidate/${id}` }>
                     Edit Information
                   </Link>
@@ -129,7 +144,11 @@ export default class CandidateDetails extends Component {
           <Notes label="Interview Notes"  markdown={ record.InterviewNotes } />
         </Pane>
         <Pane label="ATS">
-
+          { ats && Object.keys(ats).map(key => {
+              const process = ats[key];
+              return (<Ats id={ key } process={ process } type="Job" />)
+            })
+          }
         </Pane>
       </Tabs>
 

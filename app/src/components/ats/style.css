@@ -40,14 +40,18 @@
   align-items: center;
 }
 
-.commandButtons__2egA9 :global(.tag) {
+.commandButtons :global(.tag) {
     margin-right: 0.5em;
 }
 
 .step.success {
   background: #00d1b2;
   color: white;
+}
 
+.step.rejected {
+  background: #dbdbdb;
+  color: white;
 }
 
 .stage {

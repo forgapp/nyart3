@@ -1,6 +1,27 @@
+import { auth, database } from './firebase';
+
+let key = null;
+
+function getKey() {
+  if (key) {
+    return Promise.resolve(key);
+  }
+
+  return database.ref('Users')
+  .child(auth.currentUser.uid)
+  .child('Permissions')
+  .child('elasticKey')
+  .once('value')
+  .then(snapshot => {
+    key = snapshot.val();
+
+    return key;
+  });
+}
+
 class Elastic {
   constructor() {
-    this.baseUrl = '';
+    this.baseUrl = process.env.ELASTIC_URL || '';
   }
 
   setIndex(index) {
@@ -29,11 +50,28 @@ class Elastic {
     const saneType = type ? type + '/' : '';
     const sizeClause = sizeLimit ? `&size=${sizeLimit}` : ''
 
-    return fetch(`https://fc385d12916b5aba21876096cc99cd3b.ap-northeast-1.aws.found.io:9243/${saneIndex}${saneType}_search?q=${queryString}${sizeClause}`, {
+    return fetch(`${this.baseUrl}/${saneIndex}${saneType}_search?q=${queryString}${sizeClause}`, {
       headers: {
-        'Authorization': 'Basic bnlhcnRVc2VyOlczbGNvbWUh'
+        'Authorization': `Basic ${key}`
       }
     }).then(res => res.json());
+  }
+
+  async searchWithBody() {
+    const elasticKey = await getKey();
+    const { index, type } = this;
+    const saneIndex = index ? index + '/' : '';
+    const saneType = type ? type + '/' : '';
+    const results = fetch(`${this.baseUrl}/${saneIndex}${saneType}_search`, {
+      method: 'POST',
+      body: JSON.stringify(this.queryString),
+      headers: {
+        'Authorization': `Basic ${elasticKey}`,
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+
+    return results;
   }
 }
 

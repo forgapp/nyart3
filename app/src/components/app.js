@@ -20,7 +20,8 @@ import Spinner from './spinner';
 export default class App extends Component {
 	state = {
 		isLoading: true,
-		isAuth: false
+		isAuth: false,
+		userName: ''
 	}
 
 	componentWillMount() {
@@ -28,7 +29,8 @@ export default class App extends Component {
   		if (user) {
   			this.setState({
   				isLoading: false,
-  				isAuth: true
+				isAuth: true,
+				userName: auth.currentUser.displayName
   			});
   		} else {
   			this.setState({
@@ -47,7 +49,12 @@ export default class App extends Component {
 		this.currentUrl = e.url;
 	};
 
-	render(_, { isLoading, isAuth }) {
+	handleSignOut(event) {
+		event.preventDefault();
+		auth.signOut();
+	}
+
+	render(_, { isLoading, isAuth, userName }) {
 		if(isLoading) {
 			return <Spinner />
 		} else if(!isLoading && !isAuth) {
@@ -57,7 +64,7 @@ export default class App extends Component {
 
 		return (
 			<div id="app">
-				<Header />
+				<Header user={ userName } signOut={ this.handleSignOut } />
 				<div class="page-content">
 					<Router onChange={this.handleRoute}>
   					<Home path="/" />

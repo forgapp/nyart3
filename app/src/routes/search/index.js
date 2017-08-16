@@ -17,34 +17,50 @@ export default class Search extends Component {
     this.elastic = new Elastic();
     this.elastic
       .setIndex('record')
-      .size(10);
+			.size(10);
 
     this.handleSearchTextChanged = this.handleSearchTextChanged.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-  }
+		this.handleSearch = this.handleSearch.bind(this);
+		this.search = this.search.bind(this);
+	}
+	
+	componentDidMount() {
+		if (this.props.q) {
+			this.setState({ searchText: this.props.q })
+			this.search(this.props.q);
+		}
+	}
 
   handleSearchTextChanged(event) {
     this.setState({ searchText: event.target.value });
   }
 
   handleSearch(event) {
-    event.preventDefault();
-
-    this.elastic
-      .query(this.state.searchText)
+		event.preventDefault();
+		
+		this.search(this.state.searchText);
+	}
+		
+	search(searchText) {
+		this.elastic
+      .query(searchText)
       .search()
       .then(results => {
         this.setState({ results })
       })
       .catch(err => console.log(err));
-  }
+	}
 
   renderCard(type) {
     switch(type) {
       case 'Company':
         return CompanyCard;
       case 'Candidate':
-        return CandidateCard;
+				return CandidateCard;
+			case 'ClientContact':
+				return ClientContactCard;
+			case 'Job':
+        return JobCard;
       default:
         return null;
     }
@@ -71,6 +87,7 @@ export default class Search extends Component {
                       <option>My Candidates</option>
                       <option>My Jobs</option>
                       <option>My Companies</option>
+											<option>My Contacts</option>
                     </select>
                   </span>
                 </p>
@@ -83,10 +100,6 @@ export default class Search extends Component {
         </div>
 	    </div>
 	   </div>
-
-	      <div> Query: { matches.query }</div>
-
-	      <div> Query: { searchText }</div>
 
 	   <div class="columns is-multiline">
 	    { results && results.hits.hits.map(result => {

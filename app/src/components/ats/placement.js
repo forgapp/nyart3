@@ -1,8 +1,10 @@
 import { h, Component } from 'preact';
-import { step, success, stage, date } from './style.css';
+import { step, success, rejected, stage, date } from './style.css';
 
-const Placement = ({ placement }) => {
-  const stepClass = placement ? `${step} ${success}` : step;
+const Placement = ({ placement, isRejected }) => {
+  const stepClass = placement && !isRejected
+    ? `${step} ${success}` 
+    : (placement && isRejected ? `${step} ${rejected}` : step);
 
   return (<div class={ stepClass }>
     <p class={ stage }>Placement</p>

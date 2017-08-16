@@ -91,6 +91,9 @@ export default class JobDetails extends Component {
               </div>
               <div class="dropdown-menu">
                 <div class="dropdown-content">
+                  <Link class="dropdown-item" href={ `/process/new?job=${id}` }>
+                    Apply a candidate
+                  </Link>
                   <Link class="dropdown-item" href={ `/edit-info/Job/${id}` }>
                     Edit Information
                   </Link>

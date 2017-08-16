@@ -10,7 +10,7 @@ class Header extends Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  render(props, { isOpen }) {
+  render({ user, signOut }, { isOpen }) {
     const burgerMenuClass = isOpen ? 'navbar-burger burger is-active': 'navbar-burger burger';
     const mobileMenuClass = isOpen ? 'navbar-menu is-active': 'navbar-menu';
 
@@ -61,7 +61,16 @@ class Header extends Component {
               </Link>
             </p>
           </div>
-          <Link class="navbar-item is-tab" activeClassName="is-active" href="/profile">Profile</Link>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <Link class="navbar-link" activeClassName="is-active" href="/profile">
+              { user }
+            </Link>
+            <div class="navbar-dropdown ">
+              <a class="navbar-item " onClick={ signOut }>
+                Sign Out
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>);

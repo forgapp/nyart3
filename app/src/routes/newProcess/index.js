@@ -29,6 +29,8 @@ class NewProcess extends Component {
     super();
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.redirectToRecord = this.redirectToRecord.bind(this);
   }
 
   componentDidMount() {
@@ -79,18 +81,28 @@ class NewProcess extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { job, candidate } = this.props;
 
     database.ref('/Process')
       .push()
       .set(this.state.process)
       .then(() => {
-        if (job) {
+        this.redirectToRecord();
+      });
+  }
+
+  handleCancel(event) {
+    event.preventDefault();
+    this.redirectToRecord();
+  }
+
+  redirectToRecord() {
+    const { job, candidate } = this.props;
+
+    if (job) {
           route(`/details/job/${job}`);
         } else if (candidate) {
           route(`/details/candidate/${candidate}`);
         }
-      });
   }
 
 /*
@@ -175,7 +187,7 @@ handleJobSelect*/
               Save
             </button>
           </div>
-          <div className="control is-hidden">
+          <div className="control">
             <button className="button" onClick={ this.handleCancel }>Cancel</button>
           </div>
         </div>

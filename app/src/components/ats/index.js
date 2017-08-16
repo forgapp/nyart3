@@ -13,7 +13,7 @@ import { ats, timeline, commandButtons } from './style.css';
 import { getNextStage } from './utils';
 
 const Ats = ({ id, type, process }) => {
-  const label = type.toLowerCase() === 'job' ? process.Job.JobTitle : process.Candidate.Name;
+  const label = type.toLowerCase() === 'job' ? process.Job.Title : process.Candidate.Name;
   const labelId = type.toLowerCase() === 'job' ? process.Job.id : process.Candidate.id;
   const isPlaced = !!process.Placement;
   const isBackout = !!process.Backout;
@@ -72,12 +72,12 @@ const Ats = ({ id, type, process }) => {
     </div>
     <div class="column">
       <div class={ timeline }>
-        <Application application={ process.Application } />
-        <Submittal submittal={ process.Submittal } />
-        <Ccm ccm={ ccm1 } />
-        <Ccm ccm={ lastCCM } />
-        <Offer offer={ process.Offer } />
-        <Placement placement={ process.Placement } />
+        <Application application={ process.Application } isRejected={ process.IsRejected } />
+        <Submittal submittal={ process.Submittal } isRejected={ process.IsRejected } />
+        <Ccm ccm={ ccm1 } isRejected={ process.IsRejected } />
+        <Ccm ccm={ lastCCM } isRejected={ process.IsRejected } />
+        <Offer offer={ process.Offer } isRejected={ process.IsRejected } />
+        <Placement placement={ process.Placement } isRejected={ process.IsRejected } />
       </div>
     </div>
   </div>);
