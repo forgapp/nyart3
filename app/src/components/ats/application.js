@@ -8,6 +8,6 @@ const Application = ({ application }) => {
     <p class={ stage }>Application</p>
     <p class={ date }>{ application.StageDate }</p>
   </div>);
-}
+};
 
 export default Application;

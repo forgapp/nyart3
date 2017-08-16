@@ -1,18 +1,47 @@
+.ats:not(:last-child) {
+  border-bottom: 1px solid lightgrey;
+}
+
 .timeline {
-  display: flex;
+  display: block;
 }
 
 .step {
   flex-basis: 0;
   flex-grow: 1;
   flex-shrink: 1;
-  padding: 0.5rem;
+  padding: 0.1rem 1rem;
   color: lightgrey;
-  border: 1px solid lightgrey;
+  border: 1px solid #dbdbdb;
 }
 
 .step:not(:last-child) {
-  border-right: 0;
+  border-bottom: 0;
+}
+
+@media screen and (min-width: 769px), print {
+  .timeline {
+    display: flex;
+  }
+
+  .step {
+    padding: 0.5rem;
+  }
+
+  .step:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid #dbdbdb;
+  }
+}
+
+.commandButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.commandButtons__2egA9 :global(.tag) {
+    margin-right: 0.5em;
 }
 
 .step.success {

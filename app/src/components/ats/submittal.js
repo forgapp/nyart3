@@ -8,6 +8,6 @@ const Submittal = ({ submittal }) => {
     <p class={ stage }>Submittal</p>
     <p class={ date }>{ submittal && submittal.StageDate }</p>
   </div>);
-}
+};
 
 export default Submittal;
