@@ -105,14 +105,6 @@ class NewProcess extends Component {
         }
   }
 
-/*
-handleSubmit
-handleChange
-handleRecruiterSelect
-handleCandidateSelect
-handleCancel
-handleJobSelect*/
-
   render(_, { process }) {
     return (<form onSubmit={ this.handleSubmit }>
     <div className="container">

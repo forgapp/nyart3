@@ -4,7 +4,8 @@
   "dependencies": {
     "firebase-admin": "~4.2.1",
     "firebase-functions": "^0.5.7",
-    "node-fetch": "^1.7.1"
+    "node-fetch": "^1.7.1",
+    "uid": "0.0.2"
   },
   "private": true
 }
