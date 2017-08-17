@@ -17,6 +17,9 @@
     "extends": "eslint-config-synacor"
   },
   "devDependencies": {
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2017": "^6.24.1",
     "eslint": "^4.3.0",
     "eslint-config-synacor": "^1.0.1",
     "if-env": "^1.0.0",

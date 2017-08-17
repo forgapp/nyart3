@@ -1,6 +1,15 @@
 import { DefinePlugin } from 'webpack';
 
 export default function(config, env, helpers) {
+	let { rule } = helpers.getLoadersByName(config, 'babel-loader')[0];
+	rule.options.plugins.push('transform-regenerator');
+	rule.options.plugins.push(["transform-runtime", {
+		"helpers": false,
+		"polyfill": false,
+		"regenerator": true
+	}]);
+
+	console.log(rule)
 	config.plugins.push(
 		new DefinePlugin({
 			'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
