@@ -4,6 +4,7 @@ import CompanyCard from '../../components/company/card';
 import CandidateCard from '../../components/candidate/card';
 import ClientContactCard from '../../components/clientContact/card';
 import JobCard from '../../components/job/card';
+import { section } from './style.css';
 
 export default class Search extends Component {
   state = {
@@ -68,40 +69,40 @@ export default class Search extends Component {
 
 	render({ matches }, { searchText, results }) {
 	  return (<div>
-	  <div class="container">
-	    <div class="box">
-	      <div class="columns">
-	        <div class="column is-10">
-	          <form onSubmit={ this.handleSearch }>
-      	      <div class="field has-addons">
-      	        <p class="control is-expanded">
-      	          <input class="input" type="text" placeholder="Search" value={ searchText } onChange={ this.handleSearchTextChanged }/>
-                </p>
-                <p class="control">
-                  <button type="Submit" class="button">Seach</button>
-                </p>
-                <p class="control is-hidden">
-                  <span class="select">
-                    <select>
-                      <option>Views</option>
-                      <option>My Candidates</option>
-                      <option>My Jobs</option>
-                      <option>My Companies</option>
-											<option>My Contacts</option>
-                    </select>
-                  </span>
-                </p>
-              </div>
-            </form>
-          </div>
-          <div class="column is-hidden">
-            <a class="button is-link">Advanced</a>
+      <div class="container">
+        <div class="box">
+          <div class="columns">
+            <div class="column is-10">
+              <form onSubmit={ this.handleSearch }>
+                <div class="field has-addons">
+                  <p class="control is-expanded">
+                    <input class="input" type="text" placeholder="Search" value={ searchText } onChange={ this.handleSearchTextChanged }/>
+                  </p>
+                  <p class="control">
+                    <button type="Submit" class="button">Seach</button>
+                  </p>
+                  <p class="control is-hidden">
+                    <span class="select">
+                      <select>
+                        <option>Views</option>
+                        <option>My Candidates</option>
+                        <option>My Jobs</option>
+                        <option>My Companies</option>
+                        <option>My Contacts</option>
+                      </select>
+                    </span>
+                  </p>
+                </div>
+              </form>
+            </div>
+            <div class="column is-hidden">
+              <a class="button is-link">Advanced</a>
+            </div>
           </div>
         </div>
-	    </div>
-	   </div>
+      </div>
 
-	   <div class="columns is-multiline">
+	   <div class={ `columns is-multiline ${section}` }>
 	    { results && results.hits.hits.map(result => {
 	      const CardComponent = this.renderCard(result._type);
 
@@ -114,126 +115,3 @@ export default class Search extends Component {
     </div>);
 	}
 }
-
-/*
- <div class="columns is-multiline">
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>
-	      <div class="column is-3">
-	        <CompanyCard />
-	      </div>
-	      <div class="column is-3">
-	        <CandidateCard />
-	      </div>
-	      <div class="column is-3">
-	        <ClientContactCard />
-        </div>
-	      <div class="column is-3">
-	        <JobCard />
-	      </div>*/

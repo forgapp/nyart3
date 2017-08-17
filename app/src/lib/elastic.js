@@ -44,17 +44,19 @@ class Elastic {
     return this;
   }
 
-  search() {
+  async search() {
+    const elasticKey = await getKey();
     const { index, type, sizeLimit, queryString } = this;
     const saneIndex = index ? index + '/' : '';
     const saneType = type ? type + '/' : '';
-    const sizeClause = sizeLimit ? `&size=${sizeLimit}` : ''
-
-    return fetch(`${this.baseUrl}/${saneIndex}${saneType}_search?q=${queryString}${sizeClause}`, {
+    const sizeClause = sizeLimit ? `&size=${sizeLimit}` : '';
+    const results = fetch(`${this.baseUrl}/${saneIndex}${saneType}_search?q=${queryString}${sizeClause}`, {
       headers: {
-        'Authorization': `Basic ${key}`
+        'Authorization': `Basic ${elasticKey}`
       }
     }).then(res => res.json());
+
+    return results;
   }
 
   async searchWithBody() {

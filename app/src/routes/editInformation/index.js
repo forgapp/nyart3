@@ -5,10 +5,6 @@ import CandidateInformationEdit from '../../components/candidate/editInformation
 import CompanyInformationEdit from '../../components/company/editInformation';
 import ClientContactInformationEdit from '../../components/clientContact/editInformation';
 import JobInformationEdit from '../../components/job/editInformation';
-/*
-import JobAddForm from '../../components/job/addForm';
-import CompanyAddForm from '../../components/company/addForm';
-import ClientContactddForm from '../../components/clientContact/addForm';*/
 
 class EditRecordInformation extends Component {
   state = {
@@ -105,14 +101,10 @@ class EditRecordInformation extends Component {
   }
 
   handleCodeChange(item) {
-    // const currentCodes = this.state.record[item.id];
-    // const newCodes = [ ...currentCodes, item.value ].filter(p => !!p);
-
     const record = Object.assign(
       {},
       this.state.record,
       { [item.id]: item.value }
-      // { [item.id]: newCodes }
     );
 
     this.setState({ record });
@@ -184,11 +176,7 @@ class EditRecordInformation extends Component {
       <div>
         { record && this.getEditInformationForm(type) }
       </div>
-      <pre>
-        { JSON.stringify(record, null, 2) }
-      </pre>
     </div>)
-    // return this.getEditInformationForm(type);
   }
 }
 
