@@ -19,7 +19,36 @@ function indexRecord(type, id, record) {
 }
 
 function deleteIndex(type, id) {
+  const elasticUrl = functions.config().elastic.url;
+  const elasticKey = functions.config().elastic.key;
+
   return fetch(`${elasticUrl}/record/${type}/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Basic ${elasticKey}` }
+  }).then(response => response.json())
+  .then(response => console.log(response))
+  .catch(error => console.log(error));
+}
+
+function indexProcess(type, id, record, parentId) {
+  const elasticUrl = functions.config().elastic.url;
+  const elasticKey = functions.config().elastic.key;
+  const parentClause = parentId ? `?parent=${parentId}` : ''
+
+  return fetch(`${elasticUrl}/process/${type}/${id}${parentClause}`, {
+    method: 'PUT',
+    body: JSON.stringify(record),
+    headers: { 'Authorization': `Basic ${elasticKey}` }
+  }).then(response => response.json())
+  .then(response => console.log(response))
+  .catch(error => console.log(error));
+}
+
+function deleteProcess(type, id) {
+  const elasticUrl = functions.config().elastic.url;
+  const elasticKey = functions.config().elastic.key;
+
+  return fetch(`${elasticUrl}/process/${type}/${id}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Basic ${elasticKey}` }
   }).then(response => response.json())
@@ -33,7 +62,7 @@ exports.onCompanyCreatedIndex = functions.database
     const original = event.data.val();
     const id = event.params.companyId;
 
-    indexRecord('Company', id, original)
+    indexRecord('Company', id, original);
   });
 
 exports.onCompanyupdatedIndex = functions.database.ref('Company/{companyId}')
@@ -41,7 +70,7 @@ exports.onCompanyupdatedIndex = functions.database.ref('Company/{companyId}')
         const original = event.data.val();
         const id = event.params.companyId;
 
-        indexRecord('Company', id, original)
+        indexRecord('Company', id, original);
     });
 
 exports.onCompanyDeletedIndex = functions.database.ref('Company/{companyId}')
@@ -132,7 +161,7 @@ exports.onJobDeletedIndex = functions.database
 exports.onUserCreated = functions.auth.user()
   .onCreate(event => {
     const user = event.data;
-    
+
     return admin.database()
       .ref("/Users")
       .child(user.uid)
@@ -151,7 +180,7 @@ exports.onUserCreated = functions.auth.user()
 exports.onUserDeleted = functions.auth.user()
   .onDelete(event => {
     const user = event.data;
-    
+
     return admin.database()
       .ref("/Users")
       .child(user.uid)
@@ -161,19 +190,128 @@ exports.onUserDeleted = functions.auth.user()
 exports.onApplicationCreated = functions.database
   .ref('Process/{processId}/Application')
   .onCreate(event => {
-    return event.data.ref
-      .parent
-      .child('CurrentStage')
-      .set('Application');
+    const processId = event.params.processId;
+    const application = event.data.val();
+    const processRef = event.data.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      delete process.Application;
+
+      const processToIndex = Object.assign({
+        CurrentStage: 'Application',
+        CurrentStageDate: application.StageDate
+      }, process);
+
+      return indexProcess('metadata', processId, processToIndex)
+        .then(() => {
+          return indexProcess('application', `app${processId}`, application, processId)
+          .then(() => { console.log('Done') });
+        });
+    });
   });
 
 exports.onSubmittalCreated = functions.database
   .ref('Process/{processId}/Submittal')
   .onCreate(event => {
-    return event.data.ref
-      .parent
-      .child('CurrentStage')
-      .set('Submittal');
+    const processId = event.params.processId;
+    const submittal = event.data.val();
+    const processRef = event.data.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      delete process.Application;
+      delete process.Submittal;
+
+      const processToIndex = Object.assign({
+        CurrentStage: 'Submittal',
+        CurrentStageDate: submittal.StageDate
+      }, process);
+
+      return Promise.all([
+        indexProcess('metadata', processId, processToIndex),
+        indexProcess('submittal', `sub${processId}`, submittal, processId)
+      ]).then(() => { console.log('Done') });
+    });
+  });
+
+exports.onCCMCreated = functions.database
+  .ref('Process/{processId}/CCM/{ccmId}')
+  .onCreate(event => {
+    const processId = event.params.processId;
+    const ccmId = event.params.ccmId;
+    const ccm = event.data.val();
+    const processRef = event.data.ref.parent.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      delete process.Application;
+      delete process.Submittal;
+      delete process.CCM;
+
+      const processToIndex = Object.assign({
+        CurrentStage: ccm.Number === 1 ? 'CCM1' : 'CCM2+',
+        CurrentStageDate: ccm.StageDate
+      }, process);
+
+      return Promise.all([
+        indexProcess('metadata', processId, processToIndex),
+        indexProcess(ccm.Number === 1 ? 'ccm1' : 'ccm', `ccm${ccmId}`, ccm, processId)
+      ]).then(() => { console.log('Done') });
+    });
+  });
+
+exports.onOfferCreated = functions.database
+  .ref('Process/{processId}/Offer')
+  .onCreate(event => {
+    const processId = event.params.processId;
+    const offer = event.data.val();
+    const processRef = event.data.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      delete process.Application;
+      delete process.Submittal;
+      delete process.CCM;
+      delete process.Offer;
+
+      const processToIndex = Object.assign({
+        CurrentStage: 'Offer',
+        CurrentStageDate: offer.StageDate
+      }, process);
+
+      return Promise.all([
+        indexProcess('metadata', processId, processToIndex),
+        indexProcess('offer', `off${processId}`, offer, processId)
+      ]).then(() => { console.log('Done') });
+    });
+  });
+
+exports.onPlacementCreated = functions.database
+  .ref('Process/{processId}/Placement')
+  .onCreate(event => {
+    const processId = event.params.processId;
+    const placement = event.data.val();
+    const processRef = event.data.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      delete process.Application;
+      delete process.Submittal;
+      delete process.CCM;
+      delete process.Offer;
+      delete process.Placement;
+
+      const processToIndex = Object.assign({
+        CurrentStage: 'Placement',
+        CurrentStageDate: placement.StageDate
+      }, process);
+
+      return Promise.all([
+        indexProcess('metadata', processId, processToIndex),
+        indexProcess('placement', `off${processId}`, placement, processId)
+      ]).then(() => { console.log('Done') });
+    });
   });
 
 exports.onUserAuthorized = functions.database
@@ -181,8 +319,8 @@ exports.onUserAuthorized = functions.database
   .onWrite(event => {
     const userId = event.params.userId;
     const isAuthorized = event.data.val();
-    const userPermissionsRef = event.data.ref.parent;   
-    
+    const userPermissionsRef = event.data.ref.parent;
+
     return admin.database()
       .ref("Users")
       .child(userId)
@@ -196,30 +334,41 @@ exports.onUserAuthorized = functions.database
           roles: ["nyart_user"],
           full_name: `${user.Profile.Firstname} ${user.Profile.Lastname}`
         };
-        
+
         if (isAuthorized) {
-          return fetch(`${elasticUrl}/_xpack/security/user/${user.Profile.Username}`, {
-            method: 'POST',
-            body: JSON.stringify(elaticUser),
-            headers: { 'Authorization': `Basic ${elasticKey}` }
-          })
-          .then(response => {
+          return Promise.all([
+            fetch(`${elasticUrl}/_xpack/security/user/${user.Profile.Username}`, {
+              method: 'POST',
+              body: JSON.stringify(elaticUser),
+              headers: { 'Authorization': `Basic ${elasticKey}` }
+            }),
+            fetch(`${elasticUrl}/config/user/${userId}`, {
+              method: 'PUT',
+              body: JSON.stringify(user.Profile),
+              headers: { 'Authorization': `Basic ${elasticKey}` }
+            })
+          ]).then(response => {
             userPermissionsRef
               .child('elasticKey')
               .set(Buffer.from(`${user.Profile.Username}:${pwd}`).toString('base64'));
           })
           .catch(error => console.log(error));
         } else {
-          return fetch(`${elasticUrl}/_xpack/security/user/${user.Profile.Username}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Basic ${elasticKey}` }
-          })
-          .then(response => {
+          return Promise.all([
+            fetch(`${elasticUrl}/_xpack/security/user/${user.Profile.Username}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Basic ${elasticKey}` }
+            }),
+            fetch(`${elasticUrl}/config/user/${userId}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Basic ${elasticKey}` }
+            })
+          ]).then(response => {
             userPermissionsRef
               .child('elasticKey')
               .remove();
           })
           .catch(error => console.log(error));
         }
-      })
+      });
   });
