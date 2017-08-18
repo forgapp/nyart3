@@ -18,7 +18,7 @@ class Lookup extends Component {
     this.elastic
       .setIndex(this.props.index)
       .setType(this.props.type)
-      .size(10);
+      .size(15);
   }
 
   componentDidMount() {
@@ -102,10 +102,11 @@ class Lookup extends Component {
     });
   }
 
-  render({ placeholder }, { suggestions, searchText }) {
+  render({ placeholder, label }, { suggestions, searchText }) {
     const dropdownClass = suggestions ? `dropdown ${autocomplete} is-active` : `dropdown${autocomplete}`;
 
     return (<div class="field">
+      { label && <div class="label is-small">{ label }</div> }
       <div class={ dropdownClass }>
         <div class="dropdown-trigger">
           <p class="control">

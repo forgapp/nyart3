@@ -9,7 +9,6 @@ export default function(config, env, helpers) {
 		"regenerator": true
 	}]);
 
-	console.log(rule)
 	config.plugins.push(
 		new DefinePlugin({
 			'process.env.API_KEY': JSON.stringify(process.env.API_KEY),

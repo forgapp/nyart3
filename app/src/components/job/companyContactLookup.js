@@ -18,7 +18,7 @@ class CompanyContactLookup extends Component {
   }
 
   getClientContacts(companyId) {
-    const contactRef = database.ref("Client Contact")
+    const contactRef = database.ref("ClientContact")
       .orderByChild("Company/id")
       .equalTo(companyId);
 

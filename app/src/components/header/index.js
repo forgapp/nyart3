@@ -63,7 +63,7 @@ class Header extends Component {
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <Link class="navbar-link" activeClassName="is-active" href="/profile">
-              { user }
+              { user.displayName }
             </Link>
             <div class="navbar-dropdown ">
               <a class="navbar-item " onClick={ signOut }>

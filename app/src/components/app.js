@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import { Router } from 'preact-router';
 
-import { auth } from '../lib/firebase';
+import { database, auth } from '../lib/firebase';
 
 import Header from './header';
 import Home from '../routes/home';
@@ -17,25 +17,41 @@ import Login from '../routes/login';
 import NotFound from '../routes/notFound';
 import Spinner from './spinner';
 
+function formatDisplayName(user) {
+	return `${user.Firstname} ${user.Lastname}`;
+}
+
 export default class App extends Component {
 	state = {
 		isLoading: true,
 		isAuth: false,
-		userName: ''
+		user: null
 	}
 
 	componentWillMount() {
 		this.disposeLoginSub = auth.onAuthStateChanged(user => {
   		if (user) {
-  			this.setState({
-  				isLoading: false,
-				isAuth: true,
-				userName: auth.currentUser.displayName
-  			});
+  			database.ref('Users')
+  				.child(user.uid)
+  				.child('Profile')
+  				.once('value')
+  				.then(snapshot => {
+  					const dbUser = Object.assign({
+  						id: user.uid ,
+  						displayName: formatDisplayName(snapshot.val())
+  					}, snapshot.val());
+
+  					this.setState({
+		  				isLoading: false,
+							isAuth: true,
+							user: dbUser
+		  			});
+  				});
   		} else {
   			this.setState({
   				isLoading: false,
-  				isAuth: false
+  				isAuth: false,
+  				user: null
   			});
   		}
 		});
@@ -54,20 +70,20 @@ export default class App extends Component {
 		auth.signOut();
 	}
 
-	render(_, { isLoading, isAuth, userName }) {
+	render(_, { isLoading, isAuth, user }) {
 		if(isLoading) {
 			return <Spinner />
 		} else if(!isLoading && !isAuth) {
 			return <Login />
 		}
 
-
+console.log(user)
 		return (
 			<div id="app">
-				<Header user={ userName } signOut={ this.handleSignOut } />
+				<Header user={ user } signOut={ this.handleSignOut } />
 				<div class="page-content">
 					<Router onChange={this.handleRoute}>
-  					<Home path="/" />
+  					<Home path="/" user={ user } />
             <Profile path="/profile" />
             <New path="/new" />
             <Search path="/search" />

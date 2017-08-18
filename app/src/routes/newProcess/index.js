@@ -31,6 +31,9 @@ class NewProcess extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.redirectToRecord = this.redirectToRecord.bind(this);
+    this.handleJobSelect = this.handleJobSelect.bind(this);
+    this.handleCandidateSelect = this.handleCandidateSelect.bind(this);
+    this.handleRecruiterSelect = this.handleRecruiterSelect.bind(this);
   }
 
   componentDidMount() {
@@ -75,9 +78,50 @@ class NewProcess extends Component {
     }
   }
 
+  handleJobSelect(item) {
+    const job = {
+      Title: item.value,
+      id: item.id
+    };
 
+    const process = Object.assign(
+            {},
+            this.state.process,
+            { Job: job }
+          );
 
+          this.setState({ process });
+  }
 
+  handleCandidateSelect(item) {
+    const candidate = {
+      Name: item.value,
+      id: item.id
+    };
+
+    const process = Object.assign(
+            {},
+            this.state.process,
+            { Candidate: candidate }
+          );
+
+          this.setState({ process });
+  }
+
+  handleRecruiterSelect(item) {
+    const recruiter = {
+      Name: item.value,
+      id: item.id
+    };
+
+    const process = Object.assign(
+            {},
+            this.state.process,
+            { Recruiter: recruiter }
+          );
+
+          this.setState({ process });
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -120,7 +164,7 @@ class NewProcess extends Component {
               index="record"
               type="Candidate"
               placeholder="Candidate Name"
-              formatValue={ (item) => `${item.Firstname} ${item.lastname} (${item.JobTitle})` }
+              formatValue={ (item) => `${item.Firstname} ${item.Lastname} (${item.JobTitle})` }
               handleClick={ this.handleCandidateSelect }
               value={ process.Candidate.Name }
             />
@@ -138,8 +182,8 @@ class NewProcess extends Component {
           <p className="control is-expanded">
             <Lookup
               index="record"
-              type="Candidate"
-              placeholder="Candidate Name"
+              type="Job"
+              placeholder="Job"
               formatValue={ (item) => `${item.JobTitle} (${item.Company.Name})` }
               handleClick={ this.handleJobSelect }
               value={ process.Job.Title }
