@@ -9,7 +9,8 @@ import { section } from './style.css';
 export default class Search extends Component {
   state = {
     results: null,
-    searchText: ''
+    searchText: '',
+    selectedSearch: ''
   }
 
   constructor(props) {
@@ -22,7 +23,8 @@ export default class Search extends Component {
 
     this.handleSearchTextChanged = this.handleSearchTextChanged.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
-		this.search = this.search.bind(this);
+    this.search = this.search.bind(this);
+    this.handleDefinedSearchChanged = this.handleDefinedSearchChanged.bind(this);
 	}
 	
 	componentDidMount() {
@@ -67,7 +69,27 @@ export default class Search extends Component {
     }
   }
 
-	render({ matches }, { searchText, results }) {
+  definedSearch = {
+    MY_CANDIDATES :`Recruiter.Name:"${this.props.user.displayName}" AND _type:Candidate`,
+    MY_JOBS :`Recruiter.Name:"${this.props.user.displayName}" AND _type:Job`,
+    MY_COMPANIES :`Recruiter.Name:"${this.props.user.displayName}" AND _type:Company`,
+    MY_CONTACTS :`Recruiter.Name:"${this.props.user.displayName}" AND _type:ClientContact`,
+  }
+
+  handleDefinedSearchChanged(event) {
+    const selectedSearch = event.target.value;
+
+    this.setState({ 
+      selectedSearch,
+      searchText: this.definedSearch[selectedSearch]
+    });
+
+    if(selectedSearch !== '') {
+      this.search(this.definedSearch[selectedSearch]);
+    }
+  }
+
+	render({ matches }, { searchText, results, selectedSearch }) {
 	  return (<div>
       <div class="container">
         <div class="box">
@@ -79,18 +101,18 @@ export default class Search extends Component {
                     <input class="input" type="text" placeholder="Search" value={ searchText } onChange={ this.handleSearchTextChanged }/>
                   </p>
                   <p class="control">
-                    <button type="Submit" class="button">Seach</button>
-                  </p>
-                  <p class="control is-hidden">
                     <span class="select">
-                      <select>
-                        <option>Views</option>
-                        <option>My Candidates</option>
-                        <option>My Jobs</option>
-                        <option>My Companies</option>
-                        <option>My Contacts</option>
+                      <select onChange={ this.handleDefinedSearchChanged } value={ selectedSearch }>
+                        <option value="">Views</option>
+                        <option value="MY_CANDIDATES">My Candidates</option>
+                        <option value="MY_JOBS">My Jobs</option>
+                        <option value="MY_COMPANIES">My Companies</option>
+                        <option value="MY_CONTACTS">My Contacts</option>
                       </select>
                     </span>
+                  </p>
+                  <p class="control">
+                    <button type="Submit" class="button is-primary">Seach</button>
                   </p>
                 </div>
               </form>

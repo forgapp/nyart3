@@ -13,7 +13,10 @@ const ClientContactCard = ({ id, record }) => (<div class="card">
        <Link href={ `/details/clientcontact/${id}` }>{record.Firstname} {record.Lastname}</Link>
     </p>
   </header>
-  <div class="content">
+  <div class="card-content">
+    <div class="content">
+        <p>Works as { record.JobTitle } at { record.Company && <Link href={`/details/company/${record.Company.id}`}>{ record.Company.Name }</Link>}.</p>
+      </div>
   </div>
   <footer class="card-footer">
       <div class="card-footer-item">

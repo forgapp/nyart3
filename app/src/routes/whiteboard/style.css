@@ -1,0 +1,16 @@
+.atsCard:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.atsCardContent {
+  padding: 0.3rem 0.7rem;
+}
+
+.notVisible {
+  visibility: hidden;
+}
+
+.clear {
+  display: block;
+  clear: right;
+}

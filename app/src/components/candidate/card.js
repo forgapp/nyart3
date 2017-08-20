@@ -27,7 +27,7 @@ const CandidateCard = ({ id, record }) => {
     </header>
     <div class="card-content">
       <div class="content">
-        Works as { record.JobTitle } at { record.Company && record.Company.Name }.<br />
+        Works as { record.JobTitle } at { record.Company && <Link href={`/details/company/${record.Company.id}`}>{ record.Company.Name }</Link> }.<br />
         Base Salary of { record.Salary }円<br />
         Job Functions:<br />
         { Object.keys(jobFunctionCodes).map(key => (<p>

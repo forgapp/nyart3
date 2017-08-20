@@ -13,6 +13,7 @@ import EditRecordInformation from 'async!../routes/editInformation';
 import EditRecordNotes from 'async!../routes/editNotes';
 import EditResumes from 'async!../routes/editResumes';
 import NewProcess from 'async!../routes/newProcess';
+import Whiteboard from 'async!../routes/whiteboard';
 import Login from '../routes/login';
 import NotFound from '../routes/notFound';
 import Spinner from './spinner';
@@ -86,7 +87,8 @@ console.log(user)
   					<Home path="/" user={ user } />
             <Profile path="/profile" />
             <New path="/new" />
-            <Search path="/search" />
+            <Search path="/search"  user={ user } />
+			<Whiteboard path="/whiteboard"  user={ user } />
             <Details path="/details/:type/:id" />
             <EditRecordInformation path="/edit-info/:type/:id" />
             <EditRecordNotes path="/edit/:fieldName/:type/:id" />

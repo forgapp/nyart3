@@ -56,6 +56,20 @@ function deleteProcess(type, id) {
   .catch(error => console.log(error));
 }
 
+function getCurrentStage(process) {
+  if(process.Placement) {
+    return 'Placement';
+  } else if (process.Offer) {
+    return 'Offer';
+  } else if (process.CCM) {
+    return 'CCM';
+  } else if (process.Submittal) {
+    return 'Submittal';
+  } else if (process.Application) {
+    return 'Application';
+  }
+}
+
 exports.onCompanyCreatedIndex = functions.database
   .ref('Company/{companyId}')
   .onCreate(event => {
@@ -187,6 +201,33 @@ exports.onUserDeleted = functions.auth.user()
       .remove();
   });
 
+
+exports.onProcessRejected = functions.database
+  .ref('Process/{processId}/IsRejected')
+  .onWrite(event => {
+    const processId = event.params.processId;
+    const processRef = event.data.ref.parent;
+
+    return processRef.once('value').then(snapshot => {
+      let process = snapshot.val();
+      const currentStage = getCurrentStage(process);
+      const currentStageDate = process[currentStage].StageDate;
+      delete process.Application;
+      delete process.Submittal;
+      delete process.CCM;
+      delete process.Offer;
+      delete process.Placement;
+
+      const processToIndex = Object.assign({
+        CurrentStage: currentStage,
+        CurrentStageDate: currentStageDate
+      }, process)
+
+      return indexProcess('metadata', processId, processToIndex, null)
+        .then(() => { console.log('Done')});
+    });
+  });
+
 exports.onApplicationCreated = functions.database
   .ref('Process/{processId}/Application')
   .onCreate(event => {
@@ -313,6 +354,33 @@ exports.onPlacementCreated = functions.database
       ]).then(() => { console.log('Done') });
     });
   });
+
+exports.onUserChanged = functions.database
+  .ref('Users/{userId}/Profile')
+  .onWrite(event => {
+    const userId = event.params.userId;
+    const elasticUrl = functions.config().elastic.url;
+    const elasticKey = functions.config().elastic.key;
+    const profile = event.data.val();
+    const updateAuthUser = () => admin.auth().updateUser(userId, {
+      displayName: `${profile.Firstname} ${profile.Lastname}`,
+    });
+    const indexUser = () => fetch(`${elasticUrl}/config/user/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(profile),
+      headers: { 'Authorization': `Basic ${elasticKey}` }
+    });
+
+    return Promise.all([
+      updateAuthUser(),
+      indexUser()
+    ]).then(function(userRecord) {
+      console.log("Successfully updated user");
+    })
+    .catch(function(error) {
+      console.log("Error updating user:", error);
+    });
+  })
 
 exports.onUserAuthorized = functions.database
   .ref('Users/{userId}/Permissions/Authorized')

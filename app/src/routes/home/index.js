@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import { Link } from 'preact-router';
 import Elastic from '../../lib/elastic';
-import Stats from '../../components/stats';
+import { RecordStats, ProcessStats } from '../../components/stats';
 import Lookup from '../../components/lookup';
 import { cards, notVisible } from './style.css';
 import { getThisFiscalQuarter, getLastFiscalQuarter, getThisMonth, getLastMonth, formatPeriodRange } from '../../lib/date';
@@ -157,69 +157,57 @@ export default class Home extends Component {
 		const periodRange = formatPeriodRange(dates[period]);
 
 		return (<div>
-			<div class="box">
-				<div class="field is-grouped">
-					<p class="control">
-						<label class="label is-small">Period</label>
-						<p class="control">
-							<span class="select">
-								<select value={ period } onChange={ this.handleChangePeriod }>
-									<option value="THIS_FQ">This Fiscal Quarter</option>
-									<option value="LAST_FQ">Last Fiscal Quarter</option>
-									<option value="THIS_MONTH">This Month</option>
-									<option value="LAST_MONTH">Last Month</option>
-								</select>
-							</span>
-						</p>
-					</p>
-					<p class="control">
-						<Lookup
-							label="Recuiter"
-			        index="config"
-			        type="user"
-			        placeholder="Recruiter"
-			        formatValue={ (item) => `${item.Firstname} ${item.Lastname}` }
-			        handleClick={ this.handleRecruiterSelect }
-			        value={ recruiterName }
-			      />
-					</p>
-					<p class="control">
-						<label class={ `label is-small ${notVisible}` }>Refresh</label>
-	          <button class="button" onClick={ this.refresh }>
-	            <span class="icon">
-	            	<i class="fa fa-refresh"></i>
-	            </span>
-	          </button>
-					</p>
-				</div>
+      <div class="box">
+        <nav class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="field">
+                <label class="label is-small">Period</label>
+                <p class="control">
+                  <span class="select">
+                    <select value={ period } onChange={ this.handleChangePeriod }>
+                      <option value="THIS_FQ">This Fiscal Quarter</option>
+                      <option value="LAST_FQ">Last Fiscal Quarter</option>
+                      <option value="THIS_MONTH">This Month</option>
+                      <option value="LAST_MONTH">Last Month</option>
+                    </select>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div class="level-item">
+						  <Lookup
+                label="Recuiter"
+                index="config"
+                type="user"
+                placeholder="Recruiter"
+                formatValue={ (item) => `${item.Firstname} ${item.Lastname}` }
+                handleClick={ this.handleRecruiterSelect }
+                value={ recruiterName }
+              />
+            </div>
+            <div class="level-item">
+              <div class="field">
+                <label class={ `label is-small ${notVisible}` }>Refresh</label>
+                <button class="button" onClick={ this.refresh }>
+                  <span class="icon">
+                    <i class="fa fa-refresh"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
 			</div>
 			<div class="columns">
 				<div class="column is-9">
 					<div class="columns">
 						<div class={ `column is-3 ${cards}` }>
-							<Stats label="Candidates" stat={ recordStats.Candidate || 0 } index="Candidate" period={ periodRange } recruiterName={ recruiterName }>
-								<span class="icon">
-									<i class="fa fa-user-o"></i>
-								</span>
-							</Stats>
-
-							<Stats label="Jobs" stat={ recordStats.Job || 0 } index="Job" period={ periodRange } recruiterName={ recruiterName }>
-								<span class="icon">
-									<i class="fa fa-briefcase"></i>
-								</span>
-							</Stats>
-
-							<Stats label="Contacts" stat={ recordStats.ClientContact || 0 } index="ClientContact" period={ periodRange } recruiterName={ recruiterName }>
-								<span class="icon">
-									<i class="fa fa-users"></i>
-								</span>
-							</Stats>
-
-							<Stats label="Companies" stat={ recordStats.Company || 0 } index="Company" period={ periodRange } recruiterName={ recruiterName }>
-								<span class="icon">
-									<i class="fa fa-building-o"></i>
-								</span>
-							</Stats>
+							<RecordStats
+								stats={ recordStats }
+								period={ periodRange }
+								recruiterName={ recruiterName }
+							/>
 						</div>
 						<div class="column is-9">
 							content
@@ -227,41 +215,11 @@ export default class Home extends Component {
 					</div>
 				</div>
 				<div class={ `column ${cards}` }>
-					<Stats label="Applications" stat={ processStats.application || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
-
-					<Stats label="Submittals" stat={ processStats.submittal || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
-
-					<Stats label="CCM1" stat={ processStats.ccm1 || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
-
-					<Stats label="CCM2+" stat={ processStats.ccm || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
-
-					<Stats label="Offers" stat={ processStats.offer || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
-
-					<Stats label="Placements" stat={ processStats.placement || 0 }>
-						<span class="icon">
-							<i class="fa fa-user-o"></i>
-						</span>
-					</Stats>
+					<ProcessStats
+						stats={ processStats }
+								period={ periodRange }
+								recruiterName={ recruiterName }
+							/>
 
 
 				</div>
