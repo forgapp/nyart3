@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
-import { auth } from '../../lib/firebase';
+import { auth, googleAuthProvider } from '../../lib/firebase';
+import { loginForm } from './style.css';
 
 class Login extends Component {
   state = {
@@ -14,6 +15,7 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleLoginError = this.handleLoginError.bind(this);
+    this.handleGoogleSignIn = this.handleGoogleSignIn.bind(this);
   }
 
   handleChange(event) {
@@ -36,8 +38,22 @@ class Login extends Component {
     this.setState({ error: 'Sign in error. Check your Email or password.' });
   }
 
+  handleGoogleSignIn(event) {
+    event.preventDefault();
+
+    auth.signInWithRedirect(googleAuthProvider);
+  }
+
   render(_, { email, password, error }) {
-    return (<div className="container">
+    return (<div class={ loginForm }>
+      <button type="button" class="button is-primary is-outlined is-large" onClick={ this.handleGoogleSignIn }>
+        <span class="icon">
+          <i class="fa fa-google"></i>
+        </span>
+        <span>Sign In with Google</span>
+      </button>
+    </div>);
+    /*return (<div className="container">
       <div className="box">
         <h3 class="is-3">Login</h3>
         <form onSubmit={ this.handleSubmit }>
@@ -80,11 +96,15 @@ class Login extends Component {
             </div>
           </div>
         </form>
+
+        <button type="button" class="button is-primary" onClick={ this.handleGoogleSignIn }>
+          Sign In
+        </button>
       </div>
       { error && <div class="notification is-danger">
         { error }
       </div> }
-    </div>);
+    </div>);*/
   }
 }
 

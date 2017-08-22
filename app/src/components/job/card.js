@@ -18,6 +18,13 @@ const JobCard = ({ id, record }) => (<div class="card">
     <p>Job by { record.Company && <Link href={`/details/company/${record.Company.id}`}>{ record.Company.Name }</Link> }</p>
     <p>Followed by { record.ClientContact && <Link href={`/details/clientcontact/${record.ClientContact.id}`}>{ record.ClientContact.Name }</Link> }</p>
   </div>
+  <div class="card-content">
+    <div class="content">
+      <div>
+        { record.Recruiter.Name && `by ${record.Recruiter.Name}` } <small>{ record.RegistrationDate && `@${record.RegistrationDate}` }</small>
+      </div>
+    </div>
+  </div>
 
   <footer class="card-footer">
       <div class="card-footer-item">

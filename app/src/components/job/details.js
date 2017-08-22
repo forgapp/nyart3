@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { database } from '../../lib/firebase';
+import databaseStream from '../../lib/databaseStream';
 import { Tabs, Pane } from '../tabs';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
@@ -7,9 +7,6 @@ import { Link } from 'preact-router';
 import Notes from '../notes';
 import { DisplayLanguages } from '../languages';
 import { fullwidthTable } from './style.css';
-import { PhonesDisplay } from '../phone';
-import { EmailsDisplay } from '../emails';
-import { AddressesDisplay } from '../addresses';
 import { DisplayCodes } from '../codes';
 import Ats from '../ats';
 
@@ -26,35 +23,40 @@ export default class JobDetails extends Component {
   componentDidMount() {
     const { id } = this.props;
 
-    this.recordRef = database.ref('Job')
-      .child(id);
-
-    this.recordRef.on('value', snapshot => {
-      this.setState({ record: snapshot.val() });
-    });
-
-    this.processesRef = database.ref("Process")
-      .orderByChild("Job/id")
-      .equalTo(id);
-
-    this.processesRef.on('value', snapshot => {
-      this.setState({ ats: snapshot.val() });
-    });
+    this.createSubscriptions(id);
   }
 
   componentWillReceiveProps(nextProps, _) {
     if(nextProps.id !== this.props.id) {
-      this.recordRef.off();
-      this.recordRef = database.ref('Job/' + nextProps.id);
-      this.recordRef.on('value', snapshot => {
-        this.setState({ record: snapshot.val() });
-      });
+      this.removeSubscriptions();
+      this.createSubscriptions(nextProps.id);
     }
   }
 
   componentWillUnmount() {
-    this.recordRef.off();
-    this.recordRef = null;
+    this.removeSubscriptions();
+  }
+
+  createSubscriptions(id) {
+    this.jobSub = new databaseStream('Job', 'value')
+      .child(id)
+      .subscribe({
+        next: snapshot => this.setState({ record: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.processesSub = new databaseStream('Process', 'value')
+      .orderByChild("Job/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ ats: snapshot.val() }),
+        error: err => console.log(err)
+      });
+  }
+
+  removeSubscriptions() {
+    this.jobSub.unsubscribe();
+    this.processesSub.unsubscribe();
   }
 
   render({ id }, { record, ats }) {

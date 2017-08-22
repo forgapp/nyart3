@@ -41,7 +41,6 @@ class Tabs extends Component {
   }
 
   render() {
-    console.log('RENDER TABS')
     return (<div>
       <div class="tabs">
         { this.renderTitles() }

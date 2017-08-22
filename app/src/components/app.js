@@ -26,7 +26,8 @@ export default class App extends Component {
 	state = {
 		isLoading: true,
 		isAuth: false,
-		user: null
+		user: null,
+		isAuthorized: false
 	}
 
 	componentWillMount() {
@@ -34,18 +35,20 @@ export default class App extends Component {
   		if (user) {
   			database.ref('Users')
   				.child(user.uid)
-  				.child('Profile')
+  				// .child('Profile')
   				.once('value')
   				.then(snapshot => {
+  					const user = snapshot.val();
   					const dbUser = Object.assign({
   						id: user.uid ,
-  						displayName: formatDisplayName(snapshot.val())
-  					}, snapshot.val());
+  						displayName: formatDisplayName(user.Profile)
+  					}, user.Profile);
 
   					this.setState({
 		  				isLoading: false,
 							isAuth: true,
-							user: dbUser
+							user: dbUser,
+							isAuthorized: user.Permissions.Authorized
 		  			});
   				});
   		} else {
@@ -71,14 +74,17 @@ export default class App extends Component {
 		auth.signOut();
 	}
 
-	render(_, { isLoading, isAuth, user }) {
+	render(_, { isLoading, isAuth, user, isAuthorized }) {
 		if(isLoading) {
 			return <Spinner />
 		} else if(!isLoading && !isAuth) {
 			return <Login />
+		} else if (!isAuthorized) {
+			return (<div class="notification is-danger">
+				You are not authorized to use this application.
+			</div>)
 		}
 
-console.log(user)
 		return (
 			<div id="app">
 				<Header user={ user } signOut={ this.handleSignOut } />

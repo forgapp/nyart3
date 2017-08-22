@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { database } from '../../lib/firebase';
+import databaseStream from '../../lib/databaseStream';
 import { Tabs, Pane } from '../tabs';
 import { Information } from './display';
 import { levelTitle } from './style.css';
@@ -12,7 +12,7 @@ import { calculateAge } from '../../lib/date';
 import Ats from '../ats';
 
 export default class CandidateDetails extends Component {
-  state = { 
+  state = {
     record: null,
     ats: null
   }
@@ -24,35 +24,40 @@ export default class CandidateDetails extends Component {
   componentDidMount() {
     const { id } = this.props;
 
-    this.recordRef = database.ref('Candidate')
-      .child(id);
-
-    this.recordRef.on('value', snapshot => {
-      this.setState({ record: snapshot.val() });
-    });
-
-    this.processesRef = database.ref("Process")
-      .orderByChild("Candidate/id")
-      .equalTo(id);
-
-    this.processesRef.on('value', snapshot => {
-      this.setState({ ats: snapshot.val() });
-    });
+    this.createSubscriptions(id);
   }
 
   componentWillReceiveProps(nextProps, _) {
     if(nextProps.id !== this.props.id) {
-      this.recordRef.off();
-      this.recordRef = database.ref('Candidate/' + nextProps.id);
-      this.recordRef.on('value', snapshot => {
-        this.setState({ record: snapshot.val() });
-      });
+      this.removeSubscriptions();
+      this.createSubscriptions(nextProps.id);
     }
   }
 
   componentWillUnmount() {
-    this.recordRef.off();
-    this.recordRef = null;
+    this.removeSubscriptions();
+  }
+
+  createSubscriptions(id) {
+    this.candidateSub = new databaseStream('Candidate', 'value')
+      .child(id)
+      .subscribe({
+        next: snapshot => this.setState({ record: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.processesSub = new databaseStream('Process', 'value')
+      .orderByChild("Candidate/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ ats: snapshot.val() }),
+        error: err => console.log(err)
+      });
+  }
+
+  removeSubscriptions() {
+    this.candidateSub.unsubscribe();
+    this.processesSub.unsubscribe();
   }
 
   render({ id }, { record, ats }) {
@@ -65,7 +70,7 @@ export default class CandidateDetails extends Component {
         <div class="level-left">
           <div class="level-item">
             <div>
-              <h3 class={ `title is-3 ${levelTitle}` }>{ record.Firstname } { record.Lastname } <small>({calculateAge(record.DateOfBirth)})</small></h3>
+              <h3 class={ `title is-3 ${levelTitle}` }>{ record.Firstname } { record.Lastname }</h3>
               <h4 class="subtitle is-5">{ record.FirstnameKanji } { record.LastnameKanji }</h4>
             </div>
           </div>
@@ -74,7 +79,7 @@ export default class CandidateDetails extends Component {
             <span>{ record.Nationality }</span>
             <span>
               <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-              { record.DateOfBirth }
+              { record.DateOfBirth } { record.DateOfBirth && record.DateOfBirth !== '' && <small>({ calculateAge(record.DateOfBirth) } yrs)</small> }
             </span>
              <span>{ record.Status }</span>
           </div>
@@ -159,13 +164,3 @@ export default class CandidateDetails extends Component {
       </div>);
   }
 }
-
-{/* <Resume id={ id } /> */}
-
-      /*<div class="tile is-ancestor">
-        <div class="tile is-child">
-          <h3 class="title is-4">{ record.Firstname } { record.Lastname } <small>(30)</small></h3>
-          <h4 class="subtitle is-6">{ record.FirstnameKanji } { record.LastnameKanji }</h4>
-        </div>
-        <div class="tile is-hidden-mobile">Desktop Only</div>
-      </div>*/

@@ -210,7 +210,9 @@ export default class Home extends Component {
 							/>
 						</div>
 						<div class="column is-9">
-							content
+							<div class="notification">
+							  New Features will be added here soon.
+							</div>
 						</div>
 					</div>
 				</div>

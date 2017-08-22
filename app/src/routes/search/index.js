@@ -26,7 +26,7 @@ export default class Search extends Component {
     this.search = this.search.bind(this);
     this.handleDefinedSearchChanged = this.handleDefinedSearchChanged.bind(this);
 	}
-	
+
 	componentDidMount() {
 		if (this.props.q) {
 			this.setState({ searchText: this.props.q })
@@ -40,10 +40,10 @@ export default class Search extends Component {
 
   handleSearch(event) {
 		event.preventDefault();
-		
+
 		this.search(this.state.searchText);
 	}
-		
+
 	search(searchText) {
 		this.elastic
       .query(searchText)
@@ -79,7 +79,7 @@ export default class Search extends Component {
   handleDefinedSearchChanged(event) {
     const selectedSearch = event.target.value;
 
-    this.setState({ 
+    this.setState({
       selectedSearch,
       searchText: this.definedSearch[selectedSearch]
     });
@@ -97,9 +97,6 @@ export default class Search extends Component {
             <div class="column is-10">
               <form onSubmit={ this.handleSearch }>
                 <div class="field has-addons">
-                  <p class="control is-expanded">
-                    <input class="input" type="text" placeholder="Search" value={ searchText } onChange={ this.handleSearchTextChanged }/>
-                  </p>
                   <p class="control">
                     <span class="select">
                       <select onChange={ this.handleDefinedSearchChanged } value={ selectedSearch }>
@@ -110,6 +107,9 @@ export default class Search extends Component {
                         <option value="MY_CONTACTS">My Contacts</option>
                       </select>
                     </span>
+                  </p>
+                  <p class="control is-expanded">
+                    <input class="input" type="text" placeholder="Search" value={ searchText } onChange={ this.handleSearchTextChanged }/>
                   </p>
                   <p class="control">
                     <button type="Submit" class="button is-primary">Seach</button>

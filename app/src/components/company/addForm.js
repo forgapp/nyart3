@@ -55,11 +55,6 @@ const CompanyAddForm = ({ record, handleChange, handleRecruiterSelect, handleSub
         </div>
       </div>
     </div>
-
-
-
-
-
   </form>);
 };
 

@@ -26,8 +26,13 @@ class Edit extends Component {
       .child(this.props.id);
 
     this.resumeRef.on('value', snapshot => {
-      this.setState({ resumes: snapshot.val() })
-    })
+      this.setState({ resumes: snapshot.val() });
+    });
+  }
+
+  componentWillUnmount() {
+    this.resumeRef.off();
+    this.resumeRef = null;
   }
 
   handleChange(event) {
@@ -66,10 +71,6 @@ class Edit extends Component {
       });
 
     }
-
-
-
-    // this.setState({ uploadTasks: files });
   }
 
   deleteResume(filename, databaseKey) {

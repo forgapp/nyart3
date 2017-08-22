@@ -9,8 +9,8 @@ class Display extends Component {
       .child(this.props.id);
 
     this.resumeRef.on('value', snapshot => {
-      this.setState({ resumes: snapshot.val() })
-    })
+      this.setState({ resumes: snapshot.val() });
+    });
   }
 
   componentWillUnmount() {

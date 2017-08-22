@@ -31,7 +31,7 @@ class Lookup extends Component {
       .map(event => event.target.value);
 
     this.sub2 = inputStream
-      .addListener({
+      .subscribe({
         next: (x) => {
           this.setState({ searchText: x });
         },
@@ -42,7 +42,7 @@ class Lookup extends Component {
       .map(searchText => searchText + '*')
       .map(this.search.bind(this))
       .flatten()
-      .addListener({
+      .subscribe({
         next: (x) => {
           this.setState({ suggestions: x.hits.hits });
         },
@@ -59,7 +59,8 @@ class Lookup extends Component {
   }
 
   componentWillUnmount() {
-    console.log(this.sub);
+    this.sub.unsubscribe();
+    this.sub2.unsubscribe();
   }
 
   scrollToView() {

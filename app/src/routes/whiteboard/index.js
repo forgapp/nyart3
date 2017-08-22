@@ -1,5 +1,4 @@
 import { h, Component } from 'preact';
-import { Link } from 'preact-router';
 import Elastic from '../../lib/elastic';
 import Lookup from '../../components/lookup';
 import { notVisible, atsCard, atsCardContent, clear } from './style.css';
@@ -9,7 +8,7 @@ export default class Whiteboard extends Component {
 		processes: {},
 		recruiterName: ''
   }
-  
+
   constructor(props) {
 		super(props);
 
@@ -23,22 +22,25 @@ export default class Whiteboard extends Component {
       .setIndex('process')
       .setType('metadata');
     this.setState({ recruiterName: this.props.user.displayName });
-    
-    this.getProcesses(this.props.user.displayName)
+
+    this.getProcesses(this.props.user.displayName);
   }
-  
+
   getProcesses(recruiterName) {
     this.processSearch.query({
       "query": {
         "bool" : {
           "must" : [
             { "match": { "Recruiter.Name": recruiterName } }
+          ],
+          "must_not" : [
+            { "match": { "IsRejected": true } }
           ]
         }
       }
     }).searchWithBody()
 		.then(resp => {
-      const processes = resp.hits.hits 
+      const processes = resp.hits.hits
         .reduce((aggr, current) => {
           if(!aggr[current._source.CurrentStage]) {
             return Object.assign({}, aggr, {
@@ -50,7 +52,7 @@ export default class Whiteboard extends Component {
             [current._source.CurrentStage]: [...aggr[current._source.CurrentStage], current._source]
           });
         }, {})
-      
+
         this.setState({ processes });
       console.log('PROCESSES', processes)
     })

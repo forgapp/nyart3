@@ -4,7 +4,8 @@ import { PhonesDisplay } from '../../phone';
 import { EmailsDisplay } from '../../emails';
 import { AddressesDisplay } from '../../addresses';
 import { DisplayCodes } from '../../codes';
-import { fullwidthTable } from './style.css'
+import { fullwidthTable } from './style.css';
+import { calculateAge } from '../../../lib/date';
 
 const Information = ({
   Nationality,
@@ -32,7 +33,7 @@ return (<div id="information" class="columns">
       </tr>
       <tr>
         <td>Birthdate</td>
-        <td>{ Birthdate }</td>
+        <td>{ Birthdate }  { Birthdate && Birthdate !== '' && <small>({ calculateAge(Birthdate) })</small> }</td>
       </tr>
       <tr>
         <td>Status</td>

@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { database } from '../../lib/firebase';
+import databaseStream from '../../lib/databaseStream';
 import { Tabs, Pane } from '../tabs';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
@@ -29,7 +29,9 @@ class CompanyDetails extends Component {
 
   componentDidMount() {
     const { id } = this.props;
-    this.recordRef = database.ref('Company/' + id);
+
+    this.createSubscriptions(id);
+    /*this.recordRef = database.ref('Company/' + id);
 
     this.candidateRef = database.ref("Candidate")
       .orderByChild("Company/id")
@@ -63,22 +65,72 @@ class CompanyDetails extends Component {
 
     this.recordRef.on('value', snapshot => {
       this.setState({ record: snapshot.val() });
-    });
+    });*/
   }
 
   componentWillReceiveProps(nextProps, _) {
     if(nextProps.id !== this.props.id) {
-      this.recordRef.off();
+      this.removeSubscriptions();
+      this.createSubscriptions(nextProps.id);
+     /* this.recordRef.off();
       this.recordRef = database.ref('Company/' + nextProps.id);
       this.recordRef.on('value', snapshot => {
         this.setState({ record: snapshot.val() });
-      });
+      });*/
     }
   }
 
   componentWillUnmount() {
-    this.recordRef.off();
+    this.removeSubscriptions();
+    /*this.recordRef.off();
+    this.candidateRef.off();
+    this.contactsRef.off();
+    this.jobsRef.off();
     this.recordRef = null;
+    this.candidateRef = null;
+    this.contactsRef = null;
+    this.jobsRef = null;*/
+  }
+
+
+  createSubscriptions(id) {
+    this.recordSub = new databaseStream('Company', 'value')
+      .child(id)
+      .subscribe({
+        next: snapshot => this.setState({ record: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.candidateSub = new databaseStream('Candidate', 'value')
+      .orderByChild("Company/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ candidates: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.contactSub = new databaseStream('ClientContact', 'value')
+      .orderByChild("Company/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ contacts: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.jobSub = new databaseStream('Job', 'value')
+      .orderByChild("Company/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ job: snapshot.val() }),
+        error: err => console.log(err)
+      });
+  }
+
+  removeSubscriptions() {
+    this.recordSub.unsubscribe();
+    this.candidateSub.unsubscribe();
+    this.contactSub.unsubscribe();
+    this.jobSub.unsubscribe();
   }
 
   render({ id }, { record, candidates, contacts, jobs }) {

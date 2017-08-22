@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { database } from '../../lib/firebase';
+import databaseStream from '../../lib/databaseStream';
 import { Tabs, Pane } from '../tabs';
 import { levelTitle } from './style.css';
 import Spinner from '../spinner';
@@ -26,37 +26,40 @@ export default class ClientContactDetails extends Component {
   componentDidMount() {
     const { id } = this.props;
 
-    this.recordRef = database.ref('ClientContact')
-      .child(id);
-
-    this.jobsRef = database.ref("Job")
-      .orderByChild("ClientContact/id")
-      .equalTo(id);
-
-    this.recordRef.on('value', snapshot => {
-      this.setState({ record: snapshot.val() });
-    });
-
-    this.jobsRef.on("value", (snapshot) => {
-      const jobs = snapshot.val();
-
-      this.setState({ jobs });
-    });
+    this.createSubscriptions(id);
   }
 
   componentWillReceiveProps(nextProps, _) {
     if(nextProps.id !== this.props.id) {
-      this.recordRef.off();
-      this.recordRef = database.ref('ClientContact/' + nextProps.id);
-      this.recordRef.on('value', snapshot => {
-        this.setState({ record: snapshot.val() });
-      });
+      this.removeSubscriptions();
+      this.createSubscriptions(nextProps.id);
     }
   }
 
   componentWillUnmount() {
-    this.recordRef.off();
-    this.recordRef = null;
+    this.removeSubscriptions();
+  }
+
+  createSubscriptions(id) {
+    this.clientContactSub = new databaseStream('ClientContact', 'value')
+      .child(id)
+      .subscribe({
+        next: snapshot => this.setState({ record: snapshot.val() }),
+        error: err => console.log(err)
+      });
+
+    this.jobSub = new databaseStream('Job', 'value')
+      .orderByChild("ClientContact/id")
+      .equalTo(id)
+      .subscribe({
+        next: snapshot => this.setState({ jobs: snapshot.val() }),
+        error: err => console.log(err)
+      });
+  }
+
+  removeSubscriptions() {
+    this.clientContactSub.unsubscribe();
+    this.jobSub.unsubscribe();
   }
 
   render({ id }, { record, jobs }) {

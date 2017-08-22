@@ -9,7 +9,7 @@ const Stat = ({ stat, label, children, detailLink }) => (
         { children }
       </div>
       <div class="column">
-        <span class="is-size-4">{ stat }</span> 
+        <span class="is-size-4">{ stat }</span>
         <Link href={ detailLink }>
           { label }
         </Link>

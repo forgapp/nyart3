@@ -38,7 +38,6 @@ class CompanyContactLookup extends Component {
   }
 
   handleContactSelect(event) {
-    console.log('HANDLECONTACTSELECT')
     this.props.handleContactSelect({
       id: event.target.value,
       value: event.target.dataset.label
