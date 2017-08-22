@@ -1,6 +1,47 @@
 {
   "rules": {
-    ".read": "auth != null && root.child('Users').child(auth.uid).child('Authorized').val() == true",
-    ".write": "auth != null && root.child('Users').child(auth.uid).child('Authorized').val() == true"
+    "Candidate": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".indexOn": ["Company/id"]
+    },
+    "ClientContact": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".indexOn": ["Company/id"]
+    },
+    "Company": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true"
+    },
+    "Job": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".indexOn": ["Company/id", "ClientContact/id"]
+    },
+    "Picklists": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Administrator').val() == true"
+    },
+    "Process": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".indexOn": ["Candidate/id", "Job/id", "ClientContact/id"]
+    },
+    "Resumes": {
+      ".read": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Authorized').val() == true"
+    },
+    "Users": {
+      "$user_id": {
+        ".read": "auth != null && $user_id === auth.uid",
+        "Profile": {
+          ".write": "auth != null && $user_id === auth.uid"
+        },
+        "Permissions": {
+          ".write": "auth != null && root.child('Users').child(auth.uid).child('Permissions/Administrator').val() == true"
+        }
+      }
+    }
   }
 }
