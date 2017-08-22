@@ -182,7 +182,8 @@ exports.onUserCreated = functions.auth.user()
       .set({
         Profile: {
           Lastname: '',
-          Firstname: ''
+          Firstname: '',
+          email: user.email
         },
         Permissions: {
           Administrator: false,
