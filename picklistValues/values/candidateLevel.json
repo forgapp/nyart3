@@ -1,0 +1,13 @@
+{
+  "Type": "CandidateLevel",
+  "Values": [{
+    "label" : "Staff",
+    "value" : "Staff"
+  }, {
+    "label" : "Manager",
+    "value" : "Manager"
+  }, {
+    "label" : "Executive",
+    "value" : "Executive"
+  }]
+}

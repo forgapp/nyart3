@@ -1,0 +1,19 @@
+{
+  "Type": "LanguageLevel",
+  "Values":[ {
+    "label" : "Basic",
+    "value" : "Basic"
+  }, {
+    "label" : "Conversational",
+    "value" : "Conversational"
+  }, {
+    "label" : "Business",
+    "value" : "Business"
+  }, {
+    "label" : "Fluent",
+    "value" : "Fluent"
+  }, {
+    "label" : "Native",
+    "value" : "Native"
+  } ]
+}

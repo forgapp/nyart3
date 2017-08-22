@@ -1,0 +1,8 @@
+{
+  "Type": "JobSource",
+  "Values": [
+    { "label": "Referal", "value": "Referal" },
+    { "label": "LinkedIn", "value": "LinkedIn" }
+  ]
+}
+

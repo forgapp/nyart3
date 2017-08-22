@@ -1,0 +1,10 @@
+{
+  "Type": "EmailType",
+  "Values": [{
+    "label" : "Personal",
+    "value" : "Personal"
+  }, {
+    "label" : "Business",
+    "value" : "Business"
+  }]
+}

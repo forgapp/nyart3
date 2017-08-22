@@ -1,0 +1,8 @@
+{
+  "Type": "CompanySource",
+  "Values": [
+    { "label": "Referal", "value": "Referal" },
+    { "label": "linkedin", "value": "linkedin" },
+    { "label": "Zoho", "value": "Zoho" }
+  ]
+}

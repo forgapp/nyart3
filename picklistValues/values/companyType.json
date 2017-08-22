@@ -1,0 +1,10 @@
+{
+  "Type": "CompanyType",
+  "Values": [{
+    "label" : "Target",
+    "value" : "Target"
+  }, {
+    "label" : "Client",
+    "value" : "Client"
+  }]
+}

@@ -1,0 +1,9 @@
+{
+  "Type": "ClientContactSource",
+  "Values": [
+    { "label": "Network", "value": "Network" },
+    { "label": "CareerCross", "value": "CareerCross" },
+    { "label": "Daijob", "value": "Daijob" },
+    { "label": "LinkedIn", "value": "LinkedIn" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "Type": "PhoneType",
+  "Values": [{
+    "label" : "Mobile",
+    "value" : "Mobile"
+  }]
+}

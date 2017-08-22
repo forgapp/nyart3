@@ -1,0 +1,7 @@
+{
+  "Type": "AddressType",
+  "Values": [{
+    "label" : "Home",
+    "value" : "Home"
+  }]
+}

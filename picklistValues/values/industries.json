@@ -1,0 +1,10 @@
+{
+  "Type": "Industry",
+  "Values": {
+    "Information Technology": ["Internet / ASP", "Services", "Vendor"],
+    "Electronics": ["Consumer", "Non-Consumer", "Other"],
+    "Banking": ["Asset Management", "Brokerage", "Commercial", "Corporate", "Investment", "Private", "Private Equity", "Retail"],
+    "Industrial": ["Equipment", "Non-Equipment", "Other"],
+    "No Industry": ["Advertising / Marketing", "Automobile", "Chemical", "Construction / Infrastructure", "Consulting / Professional Services", "Education", "Energy", "Financial Services", "FMCG (fast-moving-consumer-goods)", "Food & Beverage", "Garment / Textiles", "Government", "Healthcare / Pharmaceutical", "Hospitality & Tourism", "Household", "Independent Financial Advisory", "Insurance Services", "Leisure", "Logistics / Transportation", "Luxury", "Manufacturing : General", "Media / Publishing", "Paper / Pulp", "Property / Real Estate", "Regulatory Body", "Retail", "Semiconductor", "Sports", "Telecommunications / Mobile", "Trading Company", "Utility", "Other"]
+  }
+}
